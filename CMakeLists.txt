@@ -7,9 +7,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Project Definitions
+set(INCLUDE_DIR include)
 set(MAIN_EXECUTABLE_NAME rectangle_intersect)
+set(TEST_EXECUTABLE_NAME tests)
 
-# Dependencies
+# Check for Compiler Compatibility
+include(CheckCXXCompilerFlag)
+check_cxx_compiler_flag("-std=c++23" COMPILER_SUPPORTS_CXX23)
+
+if(NOT COMPILER_SUPPORTS_CXX23)
+  message(FATAL_ERROR "The compiler does not support C++23.")
+endif()
+
+# Install Dependencies
 include(FetchContent)
 
 # nlohmann::json
@@ -33,7 +43,7 @@ file(GLOB SRC_FILES src/*.cpp)
 add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 list(REMOVE_ITEM SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 # Main executable header files
-target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE include)
+target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 # Link nlohmann::json (header-only)
 target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
@@ -47,10 +57,10 @@ include(CTest)
 file(GLOB TEST_FILES test/*.cpp)
 # TODO: not compatible with mocks if I need to do that eventually
 #       will need to specifically add the file we want to test by name if we want to mock the others
-add_executable(tests ${TEST_FILES} ${SRC_FILES}) 
-target_include_directories(tests PRIVATE include)
-target_link_libraries(tests PRIVATE gtest_main nlohmann_json::nlohmann_json)
+add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
+target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
+target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
 include(GoogleTest)
-gtest_discover_tests(tests)
+gtest_discover_tests(${TEST_EXECUTABLE_NAME})
 
 
