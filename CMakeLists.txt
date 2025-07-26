@@ -6,13 +6,13 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Enable testing
-include(CTest)
+# Project Definitions
+set(MAIN_EXECUTABLE_NAME rectangle_intersect)
 
-# Set up dependencies using FetchContent
+# Dependencies
 include(FetchContent)
 
-# nlohmann::json (header-only)
+# nlohmann::json
 FetchContent_Declare(
   json
   GIT_REPOSITORY https://github.com/nlohmann/json.git
@@ -29,18 +29,26 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json googletest)
 
 # Main executable
-add_executable(rectangle_intersect src/main.cpp)
-
+file(GLOB SRC_FILES src/*.cpp)
+add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
+list(REMOVE_ITEM SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+# Main executable header files
+target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE include)
 # Link nlohmann::json (header-only)
-target_link_libraries(rectangle_intersect PRIVATE nlohmann_json::nlohmann_json)
-
-target_include_directories(rectangle_intersect PRIVATE include)
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
 # Main executable install rules
-#install(TARGETS rectangle_intersect RUNTIME DESTINATION ".")
+#install(TARGETS ${MAIN_EXECUTABLE_NAME} RUNTIME DESTINATION ".")
 
+# Enable testing
+include(CTest)
+ 
 # Test executable
-add_executable(tests test/testMain.cpp)
+file(GLOB TEST_FILES test/*.cpp)
+# TODO: not compatible with mocks if I need to do that eventually
+#       will need to specifically add the file we want to test by name if we want to mock the others
+add_executable(tests ${TEST_FILES} ${SRC_FILES}) 
+target_include_directories(tests PRIVATE include)
 target_link_libraries(tests PRIVATE gtest_main nlohmann_json::nlohmann_json)
 include(GoogleTest)
 gtest_discover_tests(tests)

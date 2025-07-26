@@ -5,10 +5,10 @@
 # TODO: also needs portable exec permissions
 
 rm -rf build
-rm -rf bin
 rm -rf rectangle_intersect #TODO: make this generic naming I can change in one centralized place
 mkdir build && cd build
 cmake ..
+cmake --build . --target clean
 cmake --build .
 cp rectangle_intersect ..
 cd ..
