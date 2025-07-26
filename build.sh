@@ -6,9 +6,7 @@
 
 rm -rf build
 rm -rf rectangle_intersect #TODO: make this generic naming I can change in one centralized place
-mkdir build && cd build
-cmake ..
-cmake --build . --target clean
-cmake --build .
-cp rectangle_intersect ..
-cd ..
+mkdir build
+cmake -S . -B build
+cmake --build build 
+cmake --install build
