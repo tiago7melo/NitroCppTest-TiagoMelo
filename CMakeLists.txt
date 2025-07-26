@@ -34,15 +34,17 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/nlohmann/json.git
   GIT_TAG v3.12.0 
 )
+FetchContent_MakeAvailable(json)
 
 ## GoogleTest
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG v1.17.0
-)
-
-FetchContent_MakeAvailable(json googletest)
+if(ENABLE_TESTS)
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.17.0
+  )
+  FetchContent_MakeAvailable(googletest)
+endif()
 
 # Main executable
 file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
@@ -57,16 +59,18 @@ target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_js
 install(TARGETS ${MAIN_EXECUTABLE_NAME} RUNTIME DESTINATION ${CMAKE_SOURCE_DIR})
 
 # Testing
-include(CTest)
- 
-## Test executable
-file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
-# TODO: not compatible with mocks if I need to do that eventually
-#       will need to specifically add the file we want to test by name if we want to mock the others
-add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
-target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
-target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
-include(GoogleTest)
-gtest_discover_tests(${TEST_EXECUTABLE_NAME})
+if(ENABLE_TESTS)
+  include(CTest)
+  
+  ## Test executable
+  file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
+  # TODO: not compatible with mocks if I need to do that eventually
+  #       will need to specifically add the file we want to test by name if we want to mock the others
+  add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
+  target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
+  target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
+  include(GoogleTest)
+  gtest_discover_tests(${TEST_EXECUTABLE_NAME})
+endif()
 
 

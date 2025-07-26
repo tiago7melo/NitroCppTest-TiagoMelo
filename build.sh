@@ -7,6 +7,6 @@
 rm -rf build
 rm -rf rectangle_intersect #TODO: make this generic naming I can change in one centralized place
 mkdir build
-cmake -S . -B build
-cmake --build build 
+cmake -S . -B build -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
 cmake --install build
