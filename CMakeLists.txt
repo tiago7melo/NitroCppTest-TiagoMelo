@@ -8,6 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Project Definitions
 set(INCLUDE_DIR include)
+set(SRC_DIR src)
+set(TEST_DIR test)
 set(MAIN_EXECUTABLE_NAME rectangle_intersect)
 set(TEST_EXECUTABLE_NAME tests)
 
@@ -39,9 +41,9 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json googletest)
 
 # Main executable
-file(GLOB SRC_FILES src/*.cpp)
+file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
 add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
-list(REMOVE_ITEM SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+list(REMOVE_ITEM SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/main.cpp")
 # Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 # Link nlohmann::json (header-only)
@@ -54,7 +56,7 @@ target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_js
 include(CTest)
  
 # Test executable
-file(GLOB TEST_FILES test/*.cpp)
+file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
 # TODO: not compatible with mocks if I need to do that eventually
 #       will need to specifically add the file we want to test by name if we want to mock the others
 add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
