@@ -19,10 +19,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check for Compiler Compatibility
 include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTED)
-
-if(NOT COMPILER_SUPPORTED)
-  message(FATAL_ERROR "The compiler does not support C++20.")
+if(MSVC)
+  check_cxx_compiler_flag("/std:c++20" COMPILER_SUPPORTED)
+else()
+  check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTED)
 endif()
 
 # Fetch Dependencies
@@ -49,7 +49,6 @@ endif()
 # Main executable
 file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
 add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
-list(REMOVE_ITEM SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/main.cpp")
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 ## Link nlohmann::json (header-only)
@@ -60,11 +59,15 @@ if(ENABLE_TESTS)
   include(CTest)
   include(GoogleTest)
 
-  ## Test executable
+  ## Test Files
+  file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
+  set(TEST_SRC_FILES ${SRC_FILES})
+  list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/main.cpp")
+
+  ## Test Executable
   # TODO: if mocks are needed, swap to an approach witth multiple test executables
   # and replace the source files of the mocked classes for that particular test suite
-  file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
-  add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
+  add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${TEST_SRC_FILES}) 
   target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})

@@ -1,0 +1,65 @@
+name: Portability CI
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  windows-latest:
+    runs-on: 'windows-latest'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v2
+    - name: Build
+      run: |
+        mkdir build
+        cmake -S . -B build -DENABLE_TESTS=ON
+        cmake --build build --config RelWithDebInfo
+        cmake --install build
+    - name: Run tests
+      run: |
+        cd build
+        ctest . --output-on-failure
+  macos-latest:
+    runs-on: 'macos-latest'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        mkdir build
+        cmake -S . -B build -DENABLE_TESTS=ON
+        cmake --build build --config RelWithDebInfo
+        cmake --install build
+    - name: Run tests
+      run: |
+        cd build
+        ctest . --output-on-failure
+  ubuntu-latest-gcc:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        mkdir build
+        cmake -S . -B build -DENABLE_TESTS=ON
+        cmake --build build --config RelWithDebInfo
+        cmake --install build
+    - name: Run tests
+      run: |
+        cd build
+        ctest . --output-on-failure
+  ubuntu-latest-clang:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        export CC=/usr/bin/clang
+        export CXX=/usr/bin/clang++
+        mkdir build
+        cmake -S . -B build -DENABLE_TESTS=ON
+        cmake --build build --config RelWithDebInfo
+        cmake --install build
+    - name: Run tests
+      run: |
+        cd build
+        ctest . --output-on-failure
