@@ -19,10 +19,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check for Compiler Compatibility
 include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTED)
-
-if(NOT COMPILER_SUPPORTED)
-  message(FATAL_ERROR "The compiler does not support C++20.")
+if(MSVC)
+  check_cxx_compiler_flag("/std:c++20" COMPILER_SUPPORTED)
+else()
+  check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTED)
 endif()
 
 # Fetch Dependencies
