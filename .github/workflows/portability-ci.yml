@@ -1,7 +1,7 @@
 name: Portability CI
 on:
-  push:
   pull_request:
+    branches: [main]
 jobs:
   windows-latest:
     runs-on: 'windows-latest'
