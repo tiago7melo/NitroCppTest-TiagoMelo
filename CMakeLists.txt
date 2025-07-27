@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 project(RectangleIntersect VERSION 1.0 LANGUAGES CXX)
 
 # Cmake Environment Vars
-set(INSTALL_GTEST OFF CACHE BOOL "Do not install GTest" FORCE)
-set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}" CACHE PATH "Install exec in root folder" FORCE)
+option(INSTALL_GTEST OFF)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 ## Project Definitions
 set(INCLUDE_DIR include)
@@ -55,21 +55,18 @@ target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 ## Link nlohmann::json (header-only)
 target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
-## Main executable install rules
-install(TARGETS ${MAIN_EXECUTABLE_NAME} RUNTIME DESTINATION ${CMAKE_SOURCE_DIR})
-
 # Testing
 if(ENABLE_TESTS)
   include(CTest)
-  
+  include(GoogleTest)
+
   ## Test executable
+  # TODO: if mocks are needed, swap to an approach witth multiple test executables
+  # and replace the source files of the mocked classes for that particular test suite
   file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
-  # TODO: not compatible with mocks if I need to do that eventually
-  #       will need to specifically add the file we want to test by name if we want to mock the others
   add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
   target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
-  include(GoogleTest)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})
 endif()
 

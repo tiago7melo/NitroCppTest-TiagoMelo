@@ -1,6 +1,7 @@
 # Build artifacts
 build
 rectangle_intersect
+tests
 
 # Prerequisites
 *.d
