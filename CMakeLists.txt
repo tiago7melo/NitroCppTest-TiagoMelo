@@ -19,6 +19,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check for Compiler Compatibility
 include(CheckCXXCompilerFlag)
+
 if(MSVC)
   check_cxx_compiler_flag("/std:c++20" COMPILER_SUPPORTED)
 else()
