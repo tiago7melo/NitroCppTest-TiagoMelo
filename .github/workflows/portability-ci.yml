@@ -12,8 +12,8 @@ jobs:
     - name: Build
       run: |
         mkdir build
-        cmake -S . -B build -DENABLE_TESTS=ON -DCMAKE_BUILD_TYPE=Release
-        cmake --build build
+        cmake -S . -B build -DENABLE_TESTS=ON
+        cmake --build build --config RelWithDebInfo
         cmake --install build
     - name: Run tests
       run: |
