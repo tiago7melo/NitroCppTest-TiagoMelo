@@ -19,3 +19,17 @@ jobs:
       run: |
         cd build
         ctest . --output-on-failure
+  macos-latest:
+    runs-on: 'macos-latest'
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build
+      run: |
+        mkdir build
+        cmake -S . -B build -DENABLE_TESTS=ON
+        cmake --build build --config RelWithDebInfo
+        cmake --install build
+    - name: Run tests
+      run: |
+        cd build
+        ctest . --output-on-failure
