@@ -67,7 +67,7 @@ if(ENABLE_TESTS)
   ## Test Executable
   # TODO: if mocks are needed, swap to an approach witth multiple test executables
   # and replace the source files of the mocked classes for that particular test suite
-  add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${SRC_FILES}) 
+  add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${TEST_SRC_FILES}) 
   target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})
