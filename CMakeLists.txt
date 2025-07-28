@@ -26,6 +26,10 @@ else()
   check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTED)
 endif()
 
+if(NOT COMPILER_SUPPORTED) 
+  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++20 support.")
+endif()
+
 # Fetch Dependencies
 include(FetchContent)
 
@@ -33,7 +37,8 @@ include(FetchContent)
 FetchContent_Declare(
   json
   GIT_REPOSITORY https://github.com/nlohmann/json.git
-  GIT_TAG v3.12.0 
+  GIT_TAG v3.12.0  #TODO: replace with commit hash, dependency lock
+  # TODO: see if can find_package_args
 )
 FetchContent_MakeAvailable(json)
 
@@ -42,7 +47,8 @@ if(ENABLE_TESTS)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG v1.17.0
+    GIT_TAG v1.17.0 #TODO: dependency lock
+    FIND_PACKAGE_ARGS NAMES GTest
   )
   FetchContent_MakeAvailable(googletest)
 endif()
@@ -53,16 +59,12 @@ add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 ## Link nlohmann::json (header-only)
-target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json) #TODO: see if need to link this here because its header only
 
 # Testing
 if(ENABLE_TESTS)
   include(CTest)
   include(GoogleTest)
-
-  # Some of the tests will include use cases where a warning would be issued by the compiler
-  # We still want to test if the code handles these correctly
-  set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
   ## Test Files
   file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)

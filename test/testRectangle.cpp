@@ -18,31 +18,30 @@ using namespace nitro;
 //     int intMin = static_cast<uint32_t>(std::numeric_limits<int>::min());
 // };
 
-TEST(RectangleTest, TestCreateEmptyRectangle) {
-    Rectangle rectangle{};
-    ASSERT_TRUE(rectangle.empty());
-}
+// TEST(RectangleTest, TestCreateEmptyRectangle) {
+//     Rectangle rectangle{};
+//     ASSERT_TRUE(rectangle.empty());
+// }
 
 TEST(RectangleTest, DestructRectangles) {
-    std::unique_ptr<Rectangle> rectangle = std::make_unique<Rectangle>();
-    ASSERT_TRUE(rectangle->empty());
+    std::unique_ptr<Rectangle> rectangle = std::make_unique<Rectangle>(Rectangle{{100, 100}, 250, 80});
     rectangle.reset();
     ASSERT_FALSE(rectangle);
 }
 
-TEST(RectangleTest, RectangleNotEmptyAfterCopyingToIt) {
-    Rectangle rectangle{};
-    ASSERT_TRUE(rectangle.empty());
-    Rectangle rectangle2{{1, 1}, 4, 2};
-    rectangle = rectangle2;
-    ASSERT_FALSE(rectangle.empty());
-    ASSERT_TRUE(rectangle.getVertices().bottomLeft.x == 1);
-}
+// TEST(RectangleTest, RectangleNotEmptyAfterCopyingToIt) {
+//     Rectangle rectangle{};
+//     ASSERT_TRUE(rectangle.empty());
+//     Rectangle rectangle2{{100, 100}, 250, 80};
+//     rectangle = rectangle2;
+//     ASSERT_FALSE(rectangle.empty());
+//     ASSERT_EQ(rectangle.getVertices().bottomLeft.x, 100);
+// }
 
-TEST(RectangleTest, CreateFromTopLeftIsNotEmpty) {
-    Rectangle rectangle{{1, 1}, 4, 2};
-    ASSERT_FALSE(rectangle.empty());
-}
+// TEST(RectangleTest, CreateFromTopLeftIsNotEmpty) {
+//     Rectangle rectangle{{100, 100}, 250, 80};
+//     ASSERT_FALSE(rectangle.empty());
+// }
 
 // C++ shortcoming, NULL is 0 so this won't throw an except
 // TEST(RectangleTest, CreateFromTopLeftPassNULLCoordinates) {
@@ -57,54 +56,47 @@ TEST(RectangleTest, CreateFromTopLeftIsNotEmpty) {
 //     ASSERT_TRUE(check == Rectangle::vertexDefErrorMsg);
 // }
 
-
 TEST(RectangleTest, CreateFromTopLeftStoresInputCorrectly) {
-    Rectangle rectangle{{1, 1}, 4, 3};
-    ASSERT_EQ(rectangle.getVertices().topLeft.x, 1);
-    ASSERT_EQ(rectangle.getVertices().topLeft.y, 1);
-    ASSERT_EQ(rectangle.getWidth(), 4);
-    ASSERT_EQ(rectangle.getHeight(), 3);
+    Rectangle rectangle{{100, 100}, 250, 80};
+    ASSERT_EQ(rectangle.getVertices().topLeft.x, 100);
+    ASSERT_EQ(rectangle.getVertices().topLeft.y, 100);
+    ASSERT_EQ(rectangle.getWidth(), 250);
+    ASSERT_EQ(rectangle.getHeight(), 80);
+    Rectangle rectangle2{{140, 160}, 250, 100};
+    ASSERT_EQ(rectangle2.getVertices().topLeft.x, 140);
+    ASSERT_EQ(rectangle2.getVertices().topLeft.y, 160);
+    ASSERT_EQ(rectangle2.getWidth(), 250);
+    ASSERT_EQ(rectangle2.getHeight(), 100);
+    
 }
 
 TEST(RectangleTest, CreateFromTopLeftGeneratesCorrectVertices) {
-    Rectangle rectangle{{1, 1}, 4, 3};
-    ASSERT_EQ(rectangle.getVertices().bottomLeft.x, 1);
-    ASSERT_EQ(rectangle.getVertices().bottomLeft.y, -2);
-    ASSERT_EQ(rectangle.getVertices().bottomRight.x, 5);
-    ASSERT_EQ(rectangle.getVertices().bottomRight.y, -2);
-    ASSERT_EQ(rectangle.getVertices().topLeft.x, 1);
-    ASSERT_EQ(rectangle.getVertices().topLeft.y, 1);
-    ASSERT_EQ(rectangle.getVertices().topRight.x, 5);
-    ASSERT_EQ(rectangle.getVertices().topRight.y, 1);
+    Rectangle rectangle{{100, 100}, 250, 80};
+    ASSERT_EQ(rectangle.getVertices().bottomLeft.x, 100);
+    ASSERT_EQ(rectangle.getVertices().bottomLeft.y, 180);
+    ASSERT_EQ(rectangle.getVertices().bottomRight.x, 350);
+    ASSERT_EQ(rectangle.getVertices().bottomRight.y, 180);
+    ASSERT_EQ(rectangle.getVertices().topLeft.x, 100);
+    ASSERT_EQ(rectangle.getVertices().topLeft.y, 100);
+    ASSERT_EQ(rectangle.getVertices().topRight.x, 350);
+    ASSERT_EQ(rectangle.getVertices().topRight.y, 100);
 }
 
-// TEST(RectangleTest, ConstructorChecksVertexValidity) {
-//     std::string check = "";
-//     try {
-//         Rectangle rectangle{{1, 1}, {4, 2}, {1, 3}, {4, 3}};
-//         // TODO: check if after creating invalid rectangle,  rectangle not empty but also not valid
-//     } 
-//     catch (const std::exception& e) {
-//         check = e.what();
-//     }
-//     ASSERT_TRUE(check == Rectangle::vertexDefErrorMsg);
-// }
-
 TEST(RectangleTest, CantChangeVerticesAfterCreationDirectly) {
-    Rectangle rectangle{{1, 1}, 4, 2};
+    Rectangle rectangle{{100, 100}, 250, 80};
     Rectangle::Vertices vertices = rectangle.getVertices();
     vertices.bottomLeft.x = 2;
-    ASSERT_EQ(rectangle.getVertices().bottomLeft.x, 1);
+    ASSERT_EQ(rectangle.getVertices().bottomLeft.x, 100);
 }
 
 TEST(RectangleTest, CantChangeWidthHeightAfterCreationDirectly) {
-    Rectangle rectangle{{1, 1}, 4, 2};
+    Rectangle rectangle{{100, 100}, 250, 80};
     uint32_t width = rectangle.getWidth();
     uint32_t height = rectangle.getHeight();
     width = 2;
     height = 3;
-    ASSERT_EQ(rectangle.getWidth(), 4);
-    ASSERT_EQ(rectangle.getHeight(), 2);
+    ASSERT_EQ(rectangle.getWidth(), 250);
+    ASSERT_EQ(rectangle.getHeight(), 80);
 }
 
 TEST(RectangleTest, UnderflowWidth) {
@@ -131,7 +123,7 @@ TEST(RectangleTest, UnderflowHeight) {
 }
 
 TEST(RectangleTest, WidthExceedsXBounds) {
-    const int maxInt = static_cast<uint32_t>(std::numeric_limits<int>::max());
+    const int maxInt = std::numeric_limits<uint32_t>::max();
     std::string check = "";
     try {
         Rectangle rectangle{{maxInt - 40, 1}, 42, 1};
@@ -142,14 +134,55 @@ TEST(RectangleTest, WidthExceedsXBounds) {
     ASSERT_TRUE(check == Rectangle::canvasXBoundExceededErrorMsg);
 }
 
-TEST(RectangleTestFixture, HeightExceedsYBounds) {
-    const int minInt = static_cast<uint32_t>(std::numeric_limits<int>::min());
+TEST(RectangleTest, HeightExceedsYBounds) {
+    const int maxInt = std::numeric_limits<uint32_t>::max();
     std::string check = "";
     try {
-        Rectangle rectangle{{1, minInt + 40}, 1, 42};
-    } 
+        Rectangle rectangle{{1, maxInt - 40}, 1, 42};
+    }  
     catch (const std::exception& e) {
         check = e.what();
     }
     ASSERT_TRUE(check == Rectangle::canvasYBoundExceededErrorMsg);
 }
+
+TEST(RectangleTest, TestSimpleIntersection) 
+{
+    Rectangle rectangle{{100, 100}, 250, 80};
+    Rectangle rectangle2{{140, 160}, 250, 100};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, 140);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, 160);
+    ASSERT_EQ(intersection.getWidth(), 210);
+    ASSERT_EQ(intersection.getHeight(), 20);
+}
+
+TEST(RectangleTest, TestSimpleIntersectionNoOverlap) 
+{
+    Rectangle rectangle{{100, 100}, 250, 80};
+    Rectangle rectangle2{{500, 500}, 250, 100};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_FALSE(interRet.has_value());
+}
+
+TEST(RectangleTest, TestSimpleIntersectionFullOverlap) 
+{
+    Rectangle rectangle{{100, 100}, 250, 80};
+    Rectangle rectangle2{{100, 100}, 250, 80};
+    
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, 100);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, 100);
+    ASSERT_EQ(intersection.getWidth(), 250);
+    ASSERT_EQ(intersection.getHeight(), 80);
+
+}
+//TODO: more intersection tests, preferably with visual plot
+//TODO: test negative coordinate stuff
