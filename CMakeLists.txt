@@ -3,6 +3,7 @@ project(RectangleIntersect VERSION 1.0 LANGUAGES CXX)
 
 # Cmake Environment Vars
 option(INSTALL_GTEST OFF)
+set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 ## Project Definitions
@@ -58,6 +59,10 @@ target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_js
 if(ENABLE_TESTS)
   include(CTest)
   include(GoogleTest)
+
+  # Some of the tests will include use cases where a warning would be issued by the compiler
+  # We still want to test if the code handles these correctly
+  set(CMAKE_COMPILE_WARNING_AS_ERROR OFF)
 
   ## Test Files
   file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
