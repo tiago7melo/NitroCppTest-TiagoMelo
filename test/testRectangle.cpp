@@ -123,7 +123,7 @@ TEST(RectangleTest, UnderflowHeight) {
 }
 
 TEST(RectangleTest, WidthExceedsXBounds) {
-    const int maxInt = std::numeric_limits<uint32_t>::max();
+    const int maxInt = std::numeric_limits<int>::max();
     std::string check = "";
     try {
         Rectangle rectangle{{maxInt - 40, 1}, 42, 1};
@@ -135,7 +135,7 @@ TEST(RectangleTest, WidthExceedsXBounds) {
 }
 
 TEST(RectangleTest, HeightExceedsYBounds) {
-    const int maxInt = std::numeric_limits<uint32_t>::max();
+    const int maxInt = std::numeric_limits<int>::max();
     std::string check = "";
     try {
         Rectangle rectangle{{1, maxInt - 40}, 1, 42};
@@ -170,6 +170,7 @@ TEST(RectangleTest, TestSimpleIntersectionNoOverlap)
     ASSERT_FALSE(interRet.has_value());
 }
 
+// TODO: Originally plotted with draw.io, need to add plots for clarity
 TEST(RectangleTest, TestSimpleIntersectionFullOverlap) 
 {
     Rectangle rectangle{{100, 100}, 250, 80};
@@ -184,5 +185,87 @@ TEST(RectangleTest, TestSimpleIntersectionFullOverlap)
     ASSERT_EQ(intersection.getHeight(), 80);
 
 }
-//TODO: more intersection tests, preferably with visual plot
-//TODO: test negative coordinate stuff
+
+TEST(RectangleTest, TestIntersectionTopLeftNegativeRectangleBisectedByXYAxis) 
+{
+    Rectangle rectangle{{-100, -100}, 250, 80};
+    Rectangle rectangle2{{-140, -160}, 250, 100};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, -100);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, -100);
+    ASSERT_EQ(intersection.getWidth(), 210);
+    ASSERT_EQ(intersection.getHeight(), 40);
+}
+
+TEST(RectangleTest, TestIntersectionTopLeftFullNegativeCoordinates) 
+{
+    Rectangle rectangle{{-430, -230 }, 250, 80};
+    Rectangle rectangle2{{-390 , -170}, 250, 100};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, -390);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, -170);
+    ASSERT_EQ(intersection.getWidth(), 210);
+    ASSERT_EQ(intersection.getHeight(), 20);
+}
+
+TEST(RectangleTest, TestIntersectionOneInsideTheOther) 
+{
+    Rectangle rectangle{{-410, -320}, 250, 220};
+    Rectangle rectangle2{{-410 , -260}, 250, 100};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, -410);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, -260);
+    ASSERT_EQ(intersection.getWidth(), 250);
+    ASSERT_EQ(intersection.getHeight(), 100);
+}
+
+TEST(RectangleTest, TestIntersectionOneAcrossTheOther) 
+{
+    Rectangle rectangle{{-410, -320}, 250, 220};
+    Rectangle rectangle2{{-330 , -350}, 70, 270};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, -330);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, -320);
+    ASSERT_EQ(intersection.getWidth(), 70);
+    ASSERT_EQ(intersection.getHeight(), 220);
+}
+
+TEST(RectangleTest, TestIntersectionRectangleTopLeftAtOrigin) 
+{
+    Rectangle rectangle{{0, 0}, 250 , 220};
+    Rectangle rectangle2{{-280 , -190}, 310 , 250};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+
+    Rectangle intersection = interRet.value();
+    ASSERT_EQ(intersection.getVertices().topLeft.x, 0);
+    ASSERT_EQ(intersection.getVertices().topLeft.y, 0);
+    ASSERT_EQ(intersection.getWidth(), 30);
+    ASSERT_EQ(intersection.getHeight(), 60);
+}
+
+TEST(RectangleTest, TestIntersectionAdjacentRectanglesNoIntersection) 
+{
+    Rectangle rectangle{{0, 0}, 250 , 220};
+    Rectangle rectangle2{{-310 , -70}, 310 , 330};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_FALSE(interRet.has_value());
+}

@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <limits>
 #include "rectangle.hpp"
+#include <iostream> //TODO: rm iostream later
 
 namespace nitro {
     
@@ -16,12 +17,13 @@ Rectangle::Rectangle(Vertex2D topLeft, uint32_t width, uint32_t height) {
         throw std::overflow_error(Rectangle::underflowErrorMsg);
     }
 
-    const uint32_t maxInt = std::numeric_limits<uint32_t>::max();
-    if(topLeft.x > maxInt - width) {
+    const int64_t maxInt = std::numeric_limits<int>::max();
+    std::cout << "topLeft.x: " << topLeft.x << ", width: " << width << '\n';
+    if (static_cast<int64_t>(topLeft.x) > maxInt - static_cast<int64_t>(width)) {
         throw std::overflow_error(Rectangle::canvasXBoundExceededErrorMsg);
     }
 
-    if(topLeft.y > maxInt - height) {
+    if(static_cast<int64_t>(topLeft.y) > maxInt - static_cast<int64_t>(height)) {
         throw std::underflow_error(Rectangle::canvasYBoundExceededErrorMsg);
     }
     
@@ -64,15 +66,23 @@ std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, co
     Rectangle::Vertices r1Vertices = rectangle1.getVertices();
     Rectangle::Vertices r2Vertices = rectangle2.getVertices();
 
-    const int intLeftEdge = std::max(r1Vertices.topLeft.x, r2Vertices.topLeft.x);
-    const int intRightEdge = std::min(r1Vertices.topRight.x, r2Vertices.topRight.x);
-    const int intTopEdge = std::max(r1Vertices.topLeft.y, r2Vertices.topLeft.y);
-    const int intBottomEdge = std::min(r1Vertices.bottomLeft.y, r2Vertices.bottomLeft.y);
+    const int interLeftEdge = std::max(r1Vertices.topLeft.x, r2Vertices.topLeft.x);
+    const int interRightEdge = std::min(r1Vertices.topRight.x, r2Vertices.topRight.x);
+    const int interTopEdge = std::max(r1Vertices.topLeft.y, r2Vertices.topLeft.y);
+    const int interBottomEdge = std::min(r1Vertices.bottomLeft.y, r2Vertices.bottomLeft.y);
+    
+    // std::cout << "intLeftEdge: " << interLeftEdge << '\n';
+    // std::cout << "intRightEdge: " << interRightEdge << '\n';
+    // std::cout << "intTopEdge: " << interTopEdge << '\n';
+    // std::cout << "intBottomEdge: " << interBottomEdge << '\n';
 
-    if ((intLeftEdge < intRightEdge) && ( intBottomEdge > intTopEdge)) {
-        Vertex2D topLeftVertexX = {intLeftEdge, intTopEdge};
-        uint32_t width = static_cast<uint32_t>(intRightEdge - intLeftEdge);
-        uint32_t height = static_cast<uint32_t>(intBottomEdge - intTopEdge);
+    if ((interLeftEdge < interRightEdge) && ( interBottomEdge > interTopEdge)) {
+        Vertex2D topLeftVertexX = {interLeftEdge, interTopEdge};
+        uint32_t width = static_cast<uint32_t>(interRightEdge - interLeftEdge);
+        uint32_t height = static_cast<uint32_t>(interBottomEdge - interTopEdge);
+        // std::cout << "topLeft: " << topLeftVertexX.x << ", " << topLeftVertexX.y << '\n';
+        // std::cout << "width: " << width << '\n';
+        // std::cout << "height: " << height << '\n';
         Rectangle result{topLeftVertexX, width, height};
         return result;
     }
