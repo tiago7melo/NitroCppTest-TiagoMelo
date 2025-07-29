@@ -5,7 +5,7 @@ namespace nitro {
     typedef struct {
         int x;
         int y;
-    } Vertex2D;
+    } Vertex;
 
 } //namespace nitro
 #endif // NITRO_VERTEX_HPP

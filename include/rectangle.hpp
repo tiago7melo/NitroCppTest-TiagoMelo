@@ -11,34 +11,37 @@ namespace nitro {
     
 class Rectangle {
     public:
+        using ID = uint32_t;
         typedef struct {
-            Vertex2D bottomLeft;
-            Vertex2D bottomRight;
-            Vertex2D topLeft;
-            Vertex2D topRight;
+            Vertex bottomLeft;
+            Vertex bottomRight;
+            Vertex topLeft;
+            Vertex topRight;
         } Vertices;
 
-        Rectangle(Vertex2D topLeft, uint32_t width, uint32_t height);
+        Rectangle(ID id, Vertex topLeft, uint32_t width, uint32_t height);
         ~Rectangle() = default;
 
+        ID getId() const;
+        void setId(ID id);
         Vertices getVertices() const; 
         uint32_t getWidth() const;
         uint32_t getHeight() const;
 
         static std::optional<Rectangle> intersection(const Rectangle &rectangle1, const Rectangle &rectangle2);
-        //TODO: intersect all subsets of rectangles
-        static std::optional<std::vector<Rectangle>> intersectRectangleSet(const std::vector<Rectangle> &rectangles);
         
         static const std::string vertexDefErrorMsg;
         static const std::string underflowErrorMsg;
         static const std::string overflowErrorMsg;
         static const std::string canvasXBoundExceededErrorMsg;
         static const std::string canvasYBoundExceededErrorMsg;
+        static const std::string invalidIdErrorMsg;
 
     private:
-        static bool validateVertices(const Vertex2D &bottomLeft, const Vertex2D &bottomRight, 
-                                     const Vertex2D &topLeft, const Vertex2D &topRight);
+        static bool validateVertices(const Vertex &bottomLeft, const Vertex &bottomRight, 
+                                     const Vertex &topLeft, const Vertex &topRight);
 
+        ID id;
         Vertices vertices;
         uint32_t width;
         uint32_t height;
