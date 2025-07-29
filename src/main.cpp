@@ -1,9 +1,12 @@
 #include <iostream>
-#include <string>
-#include "emptyTestHeader.h"
+#include "rectangle.hpp"
+
+using namespace nitro;
 
 int main() {
-     std::cout << std::to_string(NUMBER) << std::endl;
-     std::cout << std::to_string(NumberGenerator::getNumber7()) << std::endl;
-     return 0;
+    Rectangle rectangle{{100, 100}, 250, 80};
+    Rectangle rectangle2{{140, 160}, 250, 100};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    return 0;
 }
