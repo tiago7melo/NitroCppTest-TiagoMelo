@@ -29,5 +29,4 @@ class RectangleIntersection {
 };
 
 } // namespace nitro
-
 #endif // NITRO_INTERSECTION_HPP

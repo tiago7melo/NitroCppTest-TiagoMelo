@@ -50,8 +50,21 @@ std::optional<std::set<RectangleIntersection>> RectangleSet::determinePairwiseIn
     return result.empty() ? std::nullopt : std::make_optional(result);
 }
 
-std::optional<std::set<RectangleIntersection>> RectangleSet::determineHigherOrderIntersections() {
-    return std::nullopt;
+std::optional<std::set<RectangleIntersection>> RectangleSet::determineHigherOrderIntersections(const std::set<RectangleIntersection> &pairwiseIntersections) {
+    std::set<RectangleIntersection> result{pairwiseIntersections.begin(), pairwiseIntersections.end()};
+    std::set<RectangleIntersection> current{pairwiseIntersections.begin(), pairwiseIntersections.end()};
+
+    bool moreIntersectionsHappened = true;
+    while (moreIntersectionsHappened)    {
+        moreIntersectionsHappened = false;
+        for(const RectangleIntersection &intersection : current) {
+            for(size_t i = 1; i <= this->rectangles.size(); i++) {
+                // if rectangle is part of the intersection already, skip
+            }
+        }
+    }
+
+    return std::nullopt; //TODO: finish retVal
 }
 
 } // namespace nitros
