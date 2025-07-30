@@ -25,9 +25,10 @@ Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t 
     }
 
     if(static_cast<int64_t>(topLeft.y) > maxInt - static_cast<int64_t>(height)) {
-        throw std::underflow_error(Rectangle::canvasYBoundExceededErrorMsg);
+        throw std::overflow_error(Rectangle::canvasYBoundExceededErrorMsg);
     }
     
+    // vertex calculation and validation
     vertices.topLeft = topLeft;
     vertices.bottomLeft = {topLeft.x, topLeft.y + static_cast<int>(height)};
     vertices.topRight = {topLeft.x + static_cast<int>(width), topLeft.y};
@@ -39,6 +40,7 @@ Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t 
 
     this->width = width;
     this->height = height;
+
     if(id == 0) {
         throw std::invalid_argument(Rectangle::invalidIdErrorMsg);
     }
@@ -98,8 +100,10 @@ std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, co
         // std::cout << "topLeft: " << topLeftVertexX.x << ", " << topLeftVertexX.y << '\n';
         // std::cout << "width: " << width << '\n';
         // std::cout << "height: " << height << '\n';
-        Rectangle result{1, topLeftVertexX, width, height}; //TODO: define ID logic for intersections
-        return result;
+
+        // RectangleIntersections will be  identified by the IDs of the intersecting rectangles
+        // the Rectangle shape that composes the RectangleIntersection doesn't need a unique ID
+        return Rectangle{1, topLeftVertexX, width, height}; 
     }
 
     return std::nullopt;

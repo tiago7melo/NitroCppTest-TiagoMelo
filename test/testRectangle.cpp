@@ -2,8 +2,9 @@
 #include <limits>
 #include "vertex.hpp"
 #include "rectangle.hpp"
+#include "rectangleIntersection.hpp"
 
-using namespace nitro;
+namespace nitro {
 
 //TODO: evaluate if we need a fixture
 // class RectangleTestFixture : public ::testing::Test {
@@ -14,47 +15,15 @@ using namespace nitro;
 //     void TearDown() override {
 //     }
 
-//     int intMax = static_cast<uint32_t>(std::numeric_limits<int>::max());
-//     int intMin = static_cast<uint32_t>(std::numeric_limits<int>::min());
+//     int intMax = static_cast<uint64_t>(std::numeric_limits<int>::max());
+//     int intMin = static_cast<uint64_t>(std::numeric_limits<int>::min());
 // };
-
-// TEST(RectangleTest, TestCreateEmptyRectangle) {
-//     Rectangle rectangle{};
-//     ASSERT_TRUE(rectangle.empty());
-// }
 
 TEST(RectangleTest, DestructRectangles) {
     std::unique_ptr<Rectangle> rectangle = std::make_unique<Rectangle>(Rectangle{1, {100, 100}, 250, 80});
     rectangle.reset();
     ASSERT_FALSE(rectangle);
 }
-
-// TEST(RectangleTest, RectangleNotEmptyAfterCopyingToIt) {
-//     Rectangle rectangle{};
-//     ASSERT_TRUE(rectangle.empty());
-//     Rectangle rectangle2{{100, 100}, 250, 80};
-//     rectangle = rectangle2;
-//     ASSERT_FALSE(rectangle.empty());
-//     ASSERT_EQ(rectangle.getVertices().bottomLeft.x, 100);
-// }
-
-// TEST(RectangleTest, CreateFromTopLeftIsNotEmpty) {
-//     Rectangle rectangle{{100, 100}, 250, 80};
-//     ASSERT_FALSE(rectangle.empty());
-// }
-
-// C++ shortcoming, NULL is 0 so this won't throw an except
-// TEST(RectangleTest, CreateFromTopLeftPassNULLCoordinates) {
-//     std::string check = "";
-//     try {
-//         Rectangle rectangle{{NULL, NULL}, 4, 2};
-//     } 
-//     catch (const std::exception& e) {
-//         check = e.what();
-//     }
-//     std::cout << "Exception:" << check << std::endl;
-//     ASSERT_TRUE(check == Rectangle::vertexDefErrorMsg);
-// }
 
 TEST(RectangleTest, IdCantBeZero) {
     std::string check = "";
@@ -64,7 +33,7 @@ TEST(RectangleTest, IdCantBeZero) {
     catch (const std::exception& e) {
         check = e.what();
     }
-    ASSERT_TRUE(check == Rectangle::invalidIdErrorMsg);
+    ASSERT_EQ(check, Rectangle::invalidIdErrorMsg);
 }
 
 TEST(RectangleTest, CreateFromTopLeftStoresInputCorrectly) {
@@ -120,7 +89,7 @@ TEST(RectangleTest, UnderflowWidth) {
     catch (const std::exception& e) {
         check = e.what();
     }
-    ASSERT_TRUE(check == Rectangle::underflowErrorMsg);
+    ASSERT_EQ(check, Rectangle::underflowErrorMsg);
 }
 
 
@@ -132,7 +101,7 @@ TEST(RectangleTest, UnderflowHeight) {
     catch (const std::exception& e) {
         check = e.what();
     }
-    ASSERT_TRUE(check == Rectangle::underflowErrorMsg);
+    ASSERT_EQ(check, Rectangle::underflowErrorMsg);
 }
 
 TEST(RectangleTest, WidthExceedsXBounds) {
@@ -144,7 +113,7 @@ TEST(RectangleTest, WidthExceedsXBounds) {
     catch (const std::exception& e) {
         check = e.what();
     }
-    ASSERT_TRUE(check == Rectangle::canvasXBoundExceededErrorMsg);
+    ASSERT_EQ(check, Rectangle::canvasXBoundExceededErrorMsg);
 }
 
 TEST(RectangleTest, HeightExceedsYBounds) {
@@ -156,7 +125,7 @@ TEST(RectangleTest, HeightExceedsYBounds) {
     catch (const std::exception& e) {
         check = e.what();
     }
-    ASSERT_TRUE(check == Rectangle::canvasYBoundExceededErrorMsg);
+    ASSERT_EQ(check, Rectangle::canvasYBoundExceededErrorMsg);
 }
 
 TEST(RectangleTest, TestSimpleIntersection) 
@@ -282,3 +251,24 @@ TEST(RectangleTest, TestIntersectionAdjacentRectanglesNoIntersection)
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_FALSE(interRet.has_value());
 }
+
+TEST(RectangleTest, TestIntersectionAbstraction) 
+{
+    Rectangle rectangle{1, {0, 0}, 250 , 220};
+    Rectangle rectangle2{2, {-280 , -190}, 310 , 250};
+
+    std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+    ASSERT_TRUE(interRet.has_value());
+    RectangleIntersection inter = RectangleIntersection(interRet.value(), {1, 2});
+
+    Rectangle intersectionShape = inter.getShape();
+    ASSERT_EQ(intersectionShape.getVertices().topLeft.x, 0);
+    ASSERT_EQ(intersectionShape.getVertices().topLeft.y, 0);
+    ASSERT_EQ(intersectionShape.getWidth(), 30);
+    ASSERT_EQ(intersectionShape.getHeight(), 60);
+
+    ASSERT_TRUE(inter.getIntersectingRectangles().find(1) != inter.getIntersectingRectangles().end());
+    ASSERT_TRUE(inter.getIntersectingRectangles().find(2) != inter.getIntersectingRectangles().end());
+}
+
+} // namespace nitro

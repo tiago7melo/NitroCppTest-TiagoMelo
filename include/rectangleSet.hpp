@@ -7,34 +7,34 @@
 #include <set>
 #include "rectangle.hpp" 
 #include "rectangleIntersection.hpp"
+#include <gtest/gtest.h>
 
 namespace nitro {
-
-struct RectangleComparator {
-    bool operator()(const Rectangle& rectangle1, const Rectangle& rectangle2) const {
-        // implement strict weak ordering, requirement of std::set
-        return rectangle1.getId() < rectangle2.getId();
-    }
-};
     
 class RectangleSet {
     public:
+
         //TODO: is this constructor even worth it? why not just restrict to fromJSON?
-        RectangleSet(const std::set<Rectangle, RectangleComparator> &rectangles);
+        RectangleSet(const std::set<Rectangle> &rectangles);
 
         std::optional<std::vector<RectangleIntersection>> intersectAll();
-        std::set<Rectangle, RectangleComparator> getRectangles() const;
+        size_t getSize() const;
+        std::set<Rectangle> getRectangles() const;
+        Rectangle atIndex(size_t index) const;
         
         static std::optional<std::set<Rectangle>> fromJSON(std::string json, size_t maxRectangles); //TODO: change to json structure
-        
-    private:
-        std::vector<std::vector<Rectangle::ID>> calculateAllSubsets(size_t maxRectangles);
-        void subsetRecursion(Rectangle::ID start, Rectangle::ID max, size_t minSize,
-                             std::vector<Rectangle::ID> &subset, 
-                             std::vector<std::vector<Rectangle::ID>> &result);
+        std::string toHumanReadableOutput() const;
 
-        std::set<Rectangle, RectangleComparator> rectangles;
-        int size;
+        static const std::string outOfRangeErrorMsg;
+    private:
+        std::optional<std::set<RectangleIntersection>> determinePairwiseIntersections();
+        //TODO: function to Intersect with the Intersections
+        std::optional<std::set<RectangleIntersection>> determineHigherOrderIntersections();
+
+        std::set<Rectangle> rectangles;
+
+        friend class RectangleSetTest;
+        FRIEND_TEST(RectangleSetTest, TestPairwiseIntersections);
 };
 
 } // namespace nitro

@@ -11,6 +11,7 @@ namespace nitro {
     
 class Rectangle {
     public:
+        /* Types */
         using ID = uint32_t;
         typedef struct {
             Vertex bottomLeft;
@@ -19,17 +20,27 @@ class Rectangle {
             Vertex topRight;
         } Vertices;
 
+        /* Constructors, Destructors */
         Rectangle(ID id, Vertex topLeft, uint32_t width, uint32_t height);
         ~Rectangle() = default;
 
+        /* Operators */
+        // implement strict weak ordering, requirement of std::set
+        bool operator<(const Rectangle& other) const {
+            return this->getId() < other.getId();
+        }
+
+        /* Getters and Setters */
         ID getId() const;
         void setId(ID id);
         Vertices getVertices() const; 
         uint32_t getWidth() const;
         uint32_t getHeight() const;
 
+        /* Functions */
         static std::optional<Rectangle> intersection(const Rectangle &rectangle1, const Rectangle &rectangle2);
         
+        /* Static Error Messages */
         static const std::string vertexDefErrorMsg;
         static const std::string underflowErrorMsg;
         static const std::string overflowErrorMsg;
@@ -38,9 +49,11 @@ class Rectangle {
         static const std::string invalidIdErrorMsg;
 
     private:
+        /* Internal Functions */
         static bool validateVertices(const Vertex &bottomLeft, const Vertex &bottomRight, 
                                      const Vertex &topLeft, const Vertex &topRight);
-
+        
+        /* Internal Members */
         ID id;
         Vertices vertices;
         uint32_t width;
