@@ -238,7 +238,7 @@ TEST(RectangleTest, TestIntersectionAbstraction)
 
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
-    RectangleIntersection inter = RectangleIntersection(interRet.value(), {1, 2});
+    Canvas::RectangleIntersection inter = Canvas::RectangleIntersection(interRet.value(), {1, 2});
 
     Rectangle intersectionShape = inter.getShape();
     ASSERT_EQ(intersectionShape.getVertices().topLeft.x, 0);

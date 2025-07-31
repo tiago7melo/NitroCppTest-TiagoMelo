@@ -6,19 +6,20 @@
 #include <vector>
 #include <set>
 #include "rectangle.hpp" 
-#include "rectangleIntersection.hpp"
 #include <gtest/gtest.h>
 
 namespace nitro {
     
 class Canvas {
     public:
+        /* Nested Classes */
+        class RectangleIntersection; 
+
         /* Constructors, Destructors*/
-        //TODO: is this constructor even worth it? why not just restrict to fromJSON?
         Canvas(const std::set<Rectangle> &rectangles);
 
         /* Getters and Setters */
-        size_t getSize() const;
+        size_t getRectangleCount() const;
         std::set<Rectangle> getRectangles() const;
         Rectangle getRectangleAtIndex(size_t index) const;
 
@@ -38,6 +39,7 @@ class Canvas {
         std::set<Rectangle> rectangles;
 
         /* For Testing */
+        //TODO: only include with TEST
         friend class CanvasTest;
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsBaseCase);
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsNoIntersections);

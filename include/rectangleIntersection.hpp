@@ -3,10 +3,11 @@
 
 #include <optional>
 #include <set>
-#include <rectangle.hpp>
+#include "rectangle.hpp"
+#include "canvas.hpp"
 
 namespace nitro {
-class RectangleIntersection {
+class Canvas::RectangleIntersection {
   public:
     /* Constructors, Destructors*/
     RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members);

@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "canvas.hpp"
+#include "rectangleIntersection.hpp"
 
 namespace nitro {
 
@@ -102,10 +103,10 @@ TEST(CanvasTest, PairwiseIntersectionsBaseCase) {
     std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> intersect = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> intersect = canvas.determinePairwiseIntersections();
     ASSERT_TRUE(intersect.has_value());
 
-    std::vector<RectangleIntersection> intersections(intersect.value().begin(), intersect.value().end());
+    std::vector<Canvas::RectangleIntersection> intersections(intersect.value().begin(), intersect.value().end());
     ASSERT_EQ(intersections.size(), 5);
 
     for (int i = 0; i < intersections.size(); i++) {
@@ -127,7 +128,7 @@ TEST(CanvasTest, PairwiseIntersectionsNoIntersections) {
 
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_FALSE(interRet.has_value());
 }
 // test/test_plots/T2SingleSimpleIntersections.png
@@ -136,11 +137,11 @@ TEST(CanvasTest, PairwiseIntersectionsOneIntersection) {
                                     {2, {-140, -160}, 250, 100}}};
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_TRUE(interRet.has_value());
 
-    std::set<RectangleIntersection> intersectionSet = interRet.value();
-    std::vector<RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
+    std::set<Canvas::RectangleIntersection> intersectionSet = interRet.value();
+    std::vector<Canvas::RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
     ASSERT_EQ(intersections.size(), 1);
 
     std::set<Rectangle::ID> expectedMembers{1, 2};
@@ -159,11 +160,11 @@ TEST(CanvasTest, TestPairwiseIntersectionTwoOverlappingRects) {
     std::set<Rectangle> rectangles{r1, r2};
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_TRUE(interRet.has_value());
 
-    std::set<RectangleIntersection> intersectionSet = interRet.value();
-    std::vector<RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
+    std::set<Canvas::RectangleIntersection> intersectionSet = interRet.value();
+    std::vector<Canvas::RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
     ASSERT_EQ(intersections.size(), 1);
 
     std::set<Rectangle::ID> intersectionMembers = intersections[0].getIntersectingRectangles();
@@ -185,11 +186,11 @@ TEST(CanvasTest, PairwiseIntersectionsCocentricRectangles) {
     std::set<Rectangle> rectangles{r1, r2};
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_TRUE(interRet.has_value());
 
-    std::set<RectangleIntersection> intersectionSet = interRet.value();
-    std::vector<RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
+    std::set<Canvas::RectangleIntersection> intersectionSet = interRet.value();
+    std::vector<Canvas::RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
     ASSERT_EQ(intersections.size(), 1);
 
     std::set<Rectangle::ID> intersectionMembers = intersections[0].getIntersectingRectangles();
@@ -210,7 +211,7 @@ TEST(CanvasTest, TestPairwiseIntersectionOneRectangle) {
     std::set<Rectangle> rectangles{r1};
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_FALSE(interRet.has_value());
 }
 
@@ -218,7 +219,7 @@ TEST(CanvasTest, TestPairwiseIntersectionZeroRectangles) {
     std::set<Rectangle> rectangles{};
     Canvas canvas{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
+    std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_FALSE(interRet.has_value());
 }
 
@@ -228,7 +229,7 @@ TEST(CanvasTest, IntersectAllWithOneRectangle) {
     std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
-    std::vector<RectangleIntersection> intersections = canvas.intersectAll();
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
     ASSERT_EQ(intersections.size(), 0);
 }
 
@@ -236,7 +237,7 @@ TEST(CanvasTest, IntersectAllWithZeroRectangles) {
     std::set<Rectangle> rectangles{};
     Canvas canvas{rectangles};
 
-    std::vector<RectangleIntersection> intersections = canvas.intersectAll();
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
     ASSERT_EQ(intersections.size(), 0);
 }
 
@@ -267,7 +268,7 @@ TEST(CanvasTest, IntersectAllWithExampleFromSpecification) {
     std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
-    std::vector<RectangleIntersection> intersections = canvas.intersectAll();
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
     ASSERT_EQ(intersections.size(), 7);
 
     for (int i = 0; i < intersections.size(); i++) {
@@ -289,7 +290,7 @@ TEST(CanvasTest, TestIntersectAllNoIntersections) {
 
     Canvas canvas{rectangles};
 
-    std::vector<RectangleIntersection> interRet = canvas.intersectAll();
+    std::vector<Canvas::RectangleIntersection> interRet = canvas.intersectAll();
     ASSERT_EQ(interRet.size(), 0);
 }
 
@@ -327,7 +328,7 @@ TEST(CanvasTest, IntersectAllRectanglesIntersectEachother) {
     std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
-    std::vector<RectangleIntersection> intersections = canvas.intersectAll();
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
     ASSERT_EQ(intersections.size(), 11);
 
     for (int i = 0; i < intersections.size(); i++) {
@@ -335,5 +336,7 @@ TEST(CanvasTest, IntersectAllRectanglesIntersectEachother) {
         ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
     }
 }
+
+//TODO: only pairwise test
 
 } // namespace nitro

@@ -3,22 +3,22 @@
 
 namespace nitro {
 
-const std::string RectangleIntersection::outOfRangeErrorMsg = "Index out of range";
+const std::string Canvas::RectangleIntersection::outOfRangeErrorMsg = "Index out of range";
 
-RectangleIntersection::RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members)
+Canvas::RectangleIntersection::RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members)
     : shape{shape}, intersectingRectangles{members} {}
     
-Rectangle RectangleIntersection::getShape() const { 
+Rectangle Canvas::RectangleIntersection::getShape() const { 
     return shape; 
 }
 
-std::set<Rectangle::ID> RectangleIntersection::getIntersectingRectangles() const { 
+std::set<Rectangle::ID> Canvas::RectangleIntersection::getIntersectingRectangles() const { 
     return intersectingRectangles; 
 }
 
-Rectangle::ID RectangleIntersection::getRectIdAtIndex(size_t index) const {
+Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) const {
         if(index >= intersectingRectangles.size()) {
-            throw::std::out_of_range(RectangleIntersection::outOfRangeErrorMsg);
+            throw::std::out_of_range(Canvas::RectangleIntersection::outOfRangeErrorMsg);
         }
 
         auto it = intersectingRectangles.begin();

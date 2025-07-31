@@ -12,7 +12,6 @@ const std::string Rectangle::canvasXBoundExceededErrorMsg = "Rectangle exceeds c
 const std::string Rectangle::canvasYBoundExceededErrorMsg = "Rectangle exceeds canvas Y bounds";
 const std::string Rectangle::invalidIdErrorMsg = "Rectangle IDs must be > 0";
 
-
 Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) {
     // overflow, underflow checks
     if (width == 0 || height == 0) {
@@ -88,19 +87,10 @@ std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, co
     const int interTopEdge = std::max(r1Vertices.topLeft.y, r2Vertices.topLeft.y);
     const int interBottomEdge = std::min(r1Vertices.bottomLeft.y, r2Vertices.bottomLeft.y);
     
-    // std::cout << "intLeftEdge: " << interLeftEdge << '\n';
-    // std::cout << "intRightEdge: " << interRightEdge << '\n';
-    // std::cout << "intTopEdge: " << interTopEdge << '\n';
-    // std::cout << "intBottomEdge: " << interBottomEdge << '\n';
-
     if ((interLeftEdge < interRightEdge) && ( interBottomEdge > interTopEdge)) {
         Vertex topLeftVertexX = {interLeftEdge, interTopEdge};
         uint32_t width = static_cast<uint32_t>(interRightEdge - interLeftEdge);
         uint32_t height = static_cast<uint32_t>(interBottomEdge - interTopEdge);
-        // std::cout << "topLeft: " << topLeftVertexX.x << ", " << topLeftVertexX.y << '\n';
-        // std::cout << "width: " << width << '\n';
-        // std::cout << "height: " << height << '\n';
-
         // RectangleIntersections will be  identified by the IDs of the intersecting rectangles
         // the Rectangle shape that composes the RectangleIntersection doesn't need a unique ID
         return Rectangle{1, topLeftVertexX, width, height}; 
