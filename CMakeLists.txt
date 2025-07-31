@@ -21,7 +21,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Check for Compiler Compatibility
 include(CheckCXXCompilerFlag)
 if(MSVC)
-  check_cxx_compiler_flag("/std:c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
+  check_cxx_compiler_flag("/cl /std:c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
 else()
   check_cxx_compiler_flag("-std=c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
 endif()
