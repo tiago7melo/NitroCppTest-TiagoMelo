@@ -7,6 +7,9 @@
 #include "canvas.hpp"
 
 namespace nitro {
+
+/* Rectangle Intersection specifically interoperates with information stored in Canvas
+   For identifying the IDs of intersecting rectangles, it is dependent on the Canvas abstraction*/
 class Canvas::RectangleIntersection {
   public:
     /* Constructors, Destructors*/

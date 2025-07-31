@@ -6,14 +6,17 @@
 #include <vector>
 #include <set>
 #include "rectangle.hpp" 
+
+#ifdef TEST
 #include <gtest/gtest.h>
+#endif
 
 namespace nitro {
     
 class Canvas {
     public:
         /* Nested Classes */
-        class RectangleIntersection; 
+        class RectangleIntersection;  
 
         /* Constructors, Destructors*/
         Canvas(const std::set<Rectangle> &rectangles);
@@ -39,7 +42,7 @@ class Canvas {
         std::set<Rectangle> rectangles;
 
         /* For Testing */
-        //TODO: only include with TEST
+        #ifdef TEST
         friend class CanvasTest;
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsBaseCase);
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsNoIntersections);
@@ -48,6 +51,7 @@ class Canvas {
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsCocentricRectangles);
         FRIEND_TEST(CanvasTest, TestPairwiseIntersectionOneRectangle);
         FRIEND_TEST(CanvasTest, TestPairwiseIntersectionZeroRectangles);
+        #endif
 };
 
 } // namespace nitro
