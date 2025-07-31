@@ -19,16 +19,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check for Compiler Compatibility
-include(CheckCXXCompilerFlag)
-if(MSVC)
-  check_cxx_compiler_flag("/cl /std:c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
-else()
-  check_cxx_compiler_flag("-std=c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
-endif()
+# include(CheckCXXCompilerFlag)
+# if(MSVC)
+#   check_cxx_compiler_flag("/cl /std:c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
+# else()
+#   check_cxx_compiler_flag("-std=c++${CMAKE_CXX_STANDARD}" COMPILER_SUPPORTED)
+# endif()
 
-if(NOT COMPILER_SUPPORTED) 
-  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++${CMAKE_CXX_STANDARD} support.")
-endif()
+# if(NOT COMPILER_SUPPORTED) 
+#   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++${CMAKE_CXX_STANDARD} support.")
+# endif()
 
 # Fetch Dependencies
 include(FetchContent)
