@@ -30,14 +30,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(json)
 
-## GoogleTest
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG v1.17.0 #TODO: dependency lock
-  FIND_PACKAGE_ARGS NAMES GTest
-)
-FetchContent_MakeAvailable(googletest)
+if(ENABLE_TESTS)
+  ## GoogleTest
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.17.0 #TODO: dependency lock
+    FIND_PACKAGE_ARGS NAMES GTest
+  )
+  FetchContent_MakeAvailable(googletest)
+endif()
 
 # Main executable
 file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
@@ -45,8 +47,13 @@ add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 ## Link nlohmann::json (header-only)
-# gtest_main must be linked because FRIEND_TEST declarations require it
-target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json) #TODO: check if json needs to be linked since its header only
+if(ENABLE_TESTS)
+  # gtest_main must be linked because FRIEND_TEST declarations require it
+  target_compile_definitions(${MAIN_EXECUTABLE_NAME} PRIVATE TEST)
+  target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
+else()
+  target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json) #TODO: check if json needs to be linked since its header only
+endif()
 
 # Testing
 if(ENABLE_TESTS)

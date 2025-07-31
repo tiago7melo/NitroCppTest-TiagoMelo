@@ -3,10 +3,14 @@
 
 #include <optional>
 #include <set>
-#include <rectangle.hpp>
+#include "rectangle.hpp"
+#include "canvas.hpp"
 
 namespace nitro {
-class RectangleIntersection {
+
+/* Rectangle Intersection specifically interoperates with information stored in Canvas
+   For identifying the IDs of intersecting rectangles, it is dependent on the Canvas abstraction*/
+class Canvas::RectangleIntersection {
   public:
     /* Constructors, Destructors*/
     RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members);
@@ -25,6 +29,9 @@ class RectangleIntersection {
     Rectangle getShape() const;
     std::set<Rectangle::ID> getIntersectingRectangles() const;
     Rectangle::ID getRectIdAtIndex(size_t index) const;
+
+    /* Functions */
+    std::string toString() const;
 
     /* Static Error Messages */
     static const std::string outOfRangeErrorMsg;

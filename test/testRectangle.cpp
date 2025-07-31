@@ -137,6 +137,7 @@ TEST(RectangleTest, TestSimpleIntersection)
     ASSERT_TRUE(interRet.has_value());
 
     Rectangle expectedShape{3, {140, 160}, 210, 20};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestSimpleIntersectionNoOverlap) 
@@ -238,7 +239,7 @@ TEST(RectangleTest, TestIntersectionAbstraction)
 
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
-    RectangleIntersection inter = RectangleIntersection(interRet.value(), {1, 2});
+    Canvas::RectangleIntersection inter = Canvas::RectangleIntersection(interRet.value(), {1, 2});
 
     Rectangle intersectionShape = inter.getShape();
     ASSERT_EQ(intersectionShape.getVertices().topLeft.x, 0);
@@ -248,6 +249,18 @@ TEST(RectangleTest, TestIntersectionAbstraction)
 
     std::set<Rectangle::ID> expectedMembers = {1, 2};
     ASSERT_EQ(inter.getIntersectingRectangles(), expectedMembers);
+}
+
+TEST(RectangleTest, TestIntersectMemberFunc) {
+    Rectangle rectangle{1, {100, 100}, 250, 80};
+    Rectangle rectangle2{2, {140, 160}, 250, 100};
+
+    std::optional<Rectangle> interRet1 = Rectangle::intersection(rectangle, rectangle2);
+    std::optional<Rectangle> interRet2 = rectangle.intersect(rectangle2);
+    ASSERT_TRUE(interRet1.has_value());
+    ASSERT_TRUE(interRet2.has_value());
+
+    ASSERT_EQ(interRet1.value(), interRet2.value());
 }
 
 } // namespace nitro
