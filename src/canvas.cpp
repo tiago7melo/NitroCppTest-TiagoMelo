@@ -1,26 +1,26 @@
 #include <stdexcept>
-#include "rectangleSet.hpp"
+#include "canvas.hpp"
 #include <iostream>
 
 namespace nitro {
 
-const std::string RectangleSet::outOfRangeErrorMsg = "Index out of range";
+const std::string Canvas::outOfRangeErrorMsg = "Index out of range";
 
-RectangleSet::RectangleSet(const std::set<Rectangle> &input) : rectangles{input} {
+Canvas::Canvas(const std::set<Rectangle> &input) : rectangles{input} {
     //TODO: consider warning if you're trying to put a rectangle with an ID that already exists?
 }
 
-std::set<Rectangle> RectangleSet::getRectangles() const {
+std::set<Rectangle> Canvas::getRectangles() const {
     return rectangles;
 }
 
-size_t RectangleSet::getSize() const {
+size_t Canvas::getSize() const {
     return rectangles.size();
 }
 
-Rectangle RectangleSet::getRectangleAtIndex(size_t index) const {
+Rectangle Canvas::getRectangleAtIndex(size_t index) const {
     if(index >= rectangles.size()) {
-        throw::std::out_of_range(RectangleSet::outOfRangeErrorMsg);
+        throw::std::out_of_range(Canvas::outOfRangeErrorMsg);
     }
 
     auto it = rectangles.begin();
@@ -28,7 +28,7 @@ Rectangle RectangleSet::getRectangleAtIndex(size_t index) const {
     return *it;
 }
 
-const std::vector<RectangleIntersection> RectangleSet::intersectAll() {
+const std::vector<RectangleIntersection> Canvas::intersectAll() {
     std::optional<std::set<RectangleIntersection>> pairwiseIntersections = this->determinePairwiseIntersections();
 
     if (pairwiseIntersections.has_value()) {
@@ -41,7 +41,7 @@ const std::vector<RectangleIntersection> RectangleSet::intersectAll() {
     return std::vector<RectangleIntersection>();
 }
 
-std::optional<std::set<RectangleIntersection>> RectangleSet::determinePairwiseIntersections() {
+std::optional<std::set<RectangleIntersection>> Canvas::determinePairwiseIntersections() {
     std::set<RectangleIntersection> result;
     for(size_t i = 0; i < this->rectangles.size(); i++) {
         for(size_t j = i + 1; j < this->rectangles.size(); j++) {
@@ -58,7 +58,7 @@ std::optional<std::set<RectangleIntersection>> RectangleSet::determinePairwiseIn
     return result.empty() ? std::nullopt : std::make_optional(result);
 }
 
-std::optional<std::set<RectangleIntersection>> RectangleSet::determineAllIntersections(const std::set<RectangleIntersection> &pairwiseIntersections) {
+std::optional<std::set<RectangleIntersection>> Canvas::determineAllIntersections(const std::set<RectangleIntersection> &pairwiseIntersections) {
     std::set<RectangleIntersection> result{pairwiseIntersections.begin(), pairwiseIntersections.end()};
     std::vector<RectangleIntersection> current{pairwiseIntersections.begin(), pairwiseIntersections.end()};
     std::set<std::set<Rectangle::ID>> intersectionsFound;
@@ -76,8 +76,8 @@ std::optional<std::set<RectangleIntersection>> RectangleSet::determineAllInterse
                     continue;
                 }
                 
-                std::optional<Rectangle> interSectionShape = Rectangle::intersection(intersection.getShape(), this->getRectangleAtIndex(i));
-                if (!interSectionShape.has_value()) {
+                std::optional<Rectangle> intersectionShape = Rectangle::intersection(intersection.getShape(), this->getRectangleAtIndex(i));
+                if (!intersectionShape.has_value()) {
                     continue;
                 }
 
@@ -87,7 +87,7 @@ std::optional<std::set<RectangleIntersection>> RectangleSet::determineAllInterse
                 }
                 intersectionsFound.insert(intersectingRectangles);
 
-                RectangleIntersection newIntersection{interSectionShape.value(), intersectingRectangles};
+                RectangleIntersection newIntersection{intersectionShape.value(), intersectingRectangles};
                 result.insert(newIntersection);
                 next.push_back(newIntersection);
                 

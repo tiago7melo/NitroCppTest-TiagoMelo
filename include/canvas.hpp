@@ -1,5 +1,5 @@
-#ifndef NITRO_RECTANGLESET_HPP
-#define NITRO_RECTANGLESET_HPP
+#ifndef NITRO_CANVAS_HPP
+#define NITRO_CANVAS_HPP
 
 #include <string>
 #include <optional>
@@ -11,12 +11,11 @@
 
 namespace nitro {
     
-class RectangleSet {
+class Canvas {
     public:
-
         /* Constructors, Destructors*/
         //TODO: is this constructor even worth it? why not just restrict to fromJSON?
-        RectangleSet(const std::set<Rectangle> &rectangles);
+        Canvas(const std::set<Rectangle> &rectangles);
 
         /* Getters and Setters */
         size_t getSize() const;
@@ -24,10 +23,9 @@ class RectangleSet {
         Rectangle getRectangleAtIndex(size_t index) const;
 
         /* Operations */
-        std::optional<std::set<RectangleIntersection>> intersectPairwise();
         const std::vector<RectangleIntersection> intersectAll();
         static std::optional<std::set<Rectangle>> fromJSON(std::string json, size_t maxRectangles); //TODO: change to json structure
-        std::string toHumanReadableOutput() const;
+        std::string toString() const;
 
         /* Static Error Messages */
         static const std::string outOfRangeErrorMsg;
@@ -40,15 +38,15 @@ class RectangleSet {
         std::set<Rectangle> rectangles;
 
         /* For Testing */
-        friend class RectangleSetTest;
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsBaseCase);
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsNoIntersections);
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsOneIntersection);
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsIntersectionTwoOverlappingRects);
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsCocentricRectangles);
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsIntersectionOneRectangle);
-        FRIEND_TEST(RectangleSetTest, PairwiseIntersectionsIntersectionZeroRectangles);
+        friend class CanvasTest;
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionsBaseCase);
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionsNoIntersections);
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionsOneIntersection);
+        FRIEND_TEST(CanvasTest, TestPairwiseIntersectionTwoOverlappingRects);
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionsCocentricRectangles);
+        FRIEND_TEST(CanvasTest, TestPairwiseIntersectionOneRectangle);
+        FRIEND_TEST(CanvasTest, TestPairwiseIntersectionZeroRectangles);
 };
 
 } // namespace nitro
-#endif // NITRO_RECTANGLESET_HPP
+#endif // NITRO_CANVAS_HPP

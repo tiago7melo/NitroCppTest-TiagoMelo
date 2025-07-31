@@ -53,7 +53,7 @@ Rectangle::ID Rectangle::getId() const{
 
 void Rectangle::setId(Rectangle::ID id) {
     // Allow setting the ID freely for a Rectangle
-    // RectangleSet responsible for ensuring that IDs are unique
+    // Canvas responsible for ensuring that IDs are unique
     this->id = id;
 }
 
