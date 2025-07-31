@@ -82,66 +82,49 @@ TEST(RectangleSetTest, GetAtIndexOutOfBounds) {
 // Tests set of rectangles from the set in the exercise's specification
 // test/test_plots/T5SampleFromSpecification.png
 TEST(RectangleSetTest, TestPairwiseIntersections) {
-    Rectangle r1{1, {100, 100}, 250, 80};
-    Rectangle r2{2, {120, 200}, 250, 150};
-    Rectangle r3{3, {140, 160}, 250, 100};
-    Rectangle r4{4, {160, 140}, 350, 190};
-    std::set<Rectangle> rectangles{r1, r2, r3, r4};
+    std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80},
+                                         {2, {120, 200}, 250, 150},
+                                         {3, {140, 160}, 250, 100},
+                                         {4, {160, 140}, 350, 190}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 3},
+                                                         {1, 4}, 
+                                                         {2, 3},
+                                                         {2, 4},
+                                                         {3, 4}};
+
+    std::vector<Rectangle> interShapes = {{1, {140, 160}, 210, 20},
+                                          {2, {160, 140}, 190, 40},
+                                          {3, {140, 200}, 230, 60},
+                                          {4, {160, 200}, 210, 130},
+                                          {5, {160, 160}, 230, 100}};
+
+    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     RectangleSet rectangleSet{rectangles};
 
-    std::optional<std::set<RectangleIntersection>> interRet = rectangleSet.determinePairwiseIntersections();
-    ASSERT_TRUE(interRet.has_value());
+    std::optional<std::set<RectangleIntersection>> intersect = rectangleSet.determinePairwiseIntersections();
+    ASSERT_TRUE(intersect.has_value());
 
-    std::set<RectangleIntersection> intersectionSet = interRet.value();
-    std::vector<RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
+    std::vector<RectangleIntersection> intersections(intersect.value().begin(), intersect.value().end());
     ASSERT_EQ(intersections.size(), 5);
 
-    std::set<Rectangle::ID> intersectionOneMembers = intersections[0].getIntersectingRectangles();
-    Rectangle intersectionOneShape = intersections[0].getShape();
-    std::set<Rectangle::ID> expectedMembers1{1, 3};
-
-    ASSERT_EQ(intersectionOneMembers.size(), 2);
-    ASSERT_EQ(intersectionOneMembers, expectedMembers1);
-    ASSERT_EQ(intersectionOneShape.getVertices().topLeft.x, 140);
-    ASSERT_EQ(intersectionOneShape.getVertices().topLeft.y, 160);
-    ASSERT_EQ(intersectionOneShape.getWidth(), 210);
-    ASSERT_EQ(intersectionOneShape.getHeight(), 20);
-
-    std::set<Rectangle::ID> intersectionTwoMembers = intersections[1].getIntersectingRectangles();
-    Rectangle intersectionTwoShape = intersections[1].getShape();
-    std::set<Rectangle::ID> expectedMembers2{1, 4};
-
-    ASSERT_EQ(intersectionTwoMembers.size(), 2);
-    ASSERT_EQ(intersectionTwoMembers, expectedMembers2);
-    ASSERT_EQ(intersectionTwoShape.getVertices().topLeft.x, 160);
-    ASSERT_EQ(intersectionTwoShape.getVertices().topLeft.y, 140);
-    ASSERT_EQ(intersectionTwoShape.getWidth(), 190);
-    ASSERT_EQ(intersectionTwoShape.getHeight(), 40);
-
-    std::set<Rectangle::ID> intersectionFiveMembers = intersections[4].getIntersectingRectangles();
-    Rectangle intersectionFiveShape = intersections[4].getShape();
-    std::set<Rectangle::ID> expectedMembers5{3, 4};
-
-    ASSERT_EQ(intersectionFiveMembers.size(), 2);
-    ASSERT_EQ(intersectionFiveMembers, expectedMembers5);
-    ASSERT_EQ(intersectionFiveShape.getVertices().topLeft.x, 160);
-    ASSERT_EQ(intersectionFiveShape.getVertices().topLeft.y, 160);
-    ASSERT_EQ(intersectionFiveShape.getWidth(), 230);
-    ASSERT_EQ(intersectionFiveShape.getHeight(), 100);
+    for (int i = 0; i < intersections.size(); i++) {
+        ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
+        ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
+    }
 }
 
 // test/test_plots/T1NoIntersections.png
 TEST(RectangleSetTest, TestPairwiseIntersectionsNoIntersections) {
-    Rectangle r1{1, {-120, -120}, 120, 120};
-    Rectangle r2{2, {0, -120}, 120, 120};
-    Rectangle r3{3, {-120, 0}, 120, 120};
-    Rectangle r4{4, {0, 0}, 120, 120};
-    Rectangle r5{5, {-280, -280}, 120, 120};
-    Rectangle r6{6, {120, -280}, 120, 120};
-    Rectangle r7{7, {-280, 160}, 120, 120};
-    Rectangle r8{8, {120, 160}, 120, 120};
+    std::set<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
+                                    {2, {0, -120}, 120, 120},
+                                    {3, {-120, 0}, 120, 120},
+                                    {4, {0, 0}, 120, 120},
+                                    {5, {-280, -280}, 120, 120},
+                                    {6, {120, -280}, 120, 120},
+                                    {7, {-280, 160}, 120, 120},
+                                    {8, {120, 160}, 120, 120}}};
 
-    std::set<Rectangle> rectangles{r1, r2, r3, r4};
     RectangleSet rectangleSet{rectangles};
 
     std::optional<std::set<RectangleIntersection>> interRet = rectangleSet.determinePairwiseIntersections();
@@ -149,9 +132,8 @@ TEST(RectangleSetTest, TestPairwiseIntersectionsNoIntersections) {
 }
 // test/test_plots/T2SingleSimpleIntersections.png
 TEST(RectangleSetTest, TestPairwiseIntersectionsOneIntersection) {
-    Rectangle r1{1, {-100, -100}, 250, 80};
-    Rectangle r2{2, {-140, -160}, 250, 100};
-    std::set<Rectangle> rectangles{r1, r2};
+    std::set<Rectangle> rectangles{{{1, {-100, -100}, 250, 80}, 
+                                    {2, {-140, -160}, 250, 100}}};
     RectangleSet rectangleSet{rectangles};
 
     std::optional<std::set<RectangleIntersection>> interRet = rectangleSet.determinePairwiseIntersections();
@@ -161,16 +143,13 @@ TEST(RectangleSetTest, TestPairwiseIntersectionsOneIntersection) {
     std::vector<RectangleIntersection> intersections(intersectionSet.begin(), intersectionSet.end());
     ASSERT_EQ(intersections.size(), 1);
 
-    std::set<Rectangle::ID> intersectionMembers = intersections[0].getIntersectingRectangles();
-    Rectangle intersectionOneShape = intersections[0].getShape();
     std::set<Rectangle::ID> expectedMembers{1, 2};
+    Rectangle expectedShape = {1, {-100, -100}, 210, 40};
+    std::set<Rectangle::ID> intersectionMembers = intersections[0].getIntersectingRectangles();
 
     ASSERT_EQ(intersectionMembers.size(), 2);
     ASSERT_EQ(intersectionMembers, expectedMembers);
-    ASSERT_EQ(intersectionOneShape.getVertices().topLeft.x, -100);
-    ASSERT_EQ(intersectionOneShape.getVertices().topLeft.y, -100);
-    ASSERT_EQ(intersectionOneShape.getWidth(), 210);
-    ASSERT_EQ(intersectionOneShape.getHeight(), 40);
+    ASSERT_EQ(intersections[0].getShape(),expectedShape);
     
 }
 // test/test_plots/T3TwoOverlappingRectangles.png
@@ -233,6 +212,32 @@ TEST(RectangleSetTest, TestPairwiseIntersectionOneRectangle) {
 
     std::optional<std::set<RectangleIntersection>> interRet = rectangleSet.determinePairwiseIntersections();
     ASSERT_FALSE(interRet.has_value());
+}
+
+TEST(RectangleSetTest, TestPairwiseIntersectionZeroRectangles) {
+    std::set<Rectangle> rectangles{};
+    RectangleSet rectangleSet{rectangles};
+
+    std::optional<std::set<RectangleIntersection>> interRet = rectangleSet.determinePairwiseIntersections();
+    ASSERT_FALSE(interRet.has_value());
+}
+
+TEST(RectangleSetTest, IntersectAllWithOneRectangle) {
+    std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80}};
+
+    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
+    RectangleSet rectangleSet{rectangles};
+
+    std::vector<RectangleIntersection> intersections = rectangleSet.intersectAll();
+    ASSERT_EQ(intersections.size(), 0);
+}
+
+TEST(RectangleSetTest, IntersectAllWithZeroRectangles) {
+    std::set<Rectangle> rectangles{};
+    RectangleSet rectangleSet{rectangles};
+
+    std::vector<RectangleIntersection> intersections = rectangleSet.intersectAll();
+    ASSERT_EQ(intersections.size(), 0);
 }
 
 // Tests set of rectangles from the set in the exercise's specification

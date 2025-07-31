@@ -136,11 +136,7 @@ TEST(RectangleTest, TestSimpleIntersection)
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
 
-    Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, 140);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, 160);
-    ASSERT_EQ(intersection.getWidth(), 210);
-    ASSERT_EQ(intersection.getHeight(), 20);
+    Rectangle expectedShape{3, {140, 160}, 210, 20};
 }
 
 TEST(RectangleTest, TestSimpleIntersectionNoOverlap) 
@@ -160,12 +156,9 @@ TEST(RectangleTest, TestSimpleIntersectionFullOverlap)
     
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
-    Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, 100);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, 100);
-    ASSERT_EQ(intersection.getWidth(), 250);
-    ASSERT_EQ(intersection.getHeight(), 80);
 
+    Rectangle expectedShape{3, {100, 100}, 250, 80};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestIntersectionTopLeftNegativeRectangleBisectedByXYAxis) 
@@ -175,12 +168,10 @@ TEST(RectangleTest, TestIntersectionTopLeftNegativeRectangleBisectedByXYAxis)
 
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
+    
 
-    Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, -100);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, -100);
-    ASSERT_EQ(intersection.getWidth(), 210);
-    ASSERT_EQ(intersection.getHeight(), 40);
+    Rectangle expectedShape{3, {-100, -100}, 210, 40};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestIntersectionTopLeftFullNegativeCoordinates) 
@@ -191,11 +182,8 @@ TEST(RectangleTest, TestIntersectionTopLeftFullNegativeCoordinates)
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
 
-    Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, -390);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, -170);
-    ASSERT_EQ(intersection.getWidth(), 210);
-    ASSERT_EQ(intersection.getHeight(), 20);
+    Rectangle expectedShape{3, {-390, -170}, 210, 20};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestIntersectionOneInsideTheOther) 
@@ -206,11 +194,8 @@ TEST(RectangleTest, TestIntersectionOneInsideTheOther)
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
 
-    Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, -410);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, -260);
-    ASSERT_EQ(intersection.getWidth(), 250);
-    ASSERT_EQ(intersection.getHeight(), 100);
+    Rectangle expectedShape{3, {-410, -260}, 250, 100};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestIntersectionOneAcrossTheOther) 
@@ -221,11 +206,8 @@ TEST(RectangleTest, TestIntersectionOneAcrossTheOther)
     std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
     ASSERT_TRUE(interRet.has_value());
 
-    Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, -330);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, -320);
-    ASSERT_EQ(intersection.getWidth(), 70);
-    ASSERT_EQ(intersection.getHeight(), 220);
+    Rectangle expectedShape{3, {-330, -320}, 70, 220};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestIntersectionRectangleTopLeftAtOrigin) 
@@ -237,10 +219,8 @@ TEST(RectangleTest, TestIntersectionRectangleTopLeftAtOrigin)
     ASSERT_TRUE(interRet.has_value());
 
     Rectangle intersection = interRet.value();
-    ASSERT_EQ(intersection.getVertices().topLeft.x, 0);
-    ASSERT_EQ(intersection.getVertices().topLeft.y, 0);
-    ASSERT_EQ(intersection.getWidth(), 30);
-    ASSERT_EQ(intersection.getHeight(), 60);
+    Rectangle expectedShape{3, {0,0}, 30, 60};
+    ASSERT_EQ(interRet.value(), expectedShape);
 }
 
 TEST(RectangleTest, TestIntersectionAdjacentRectanglesNoIntersection) 
@@ -267,8 +247,8 @@ TEST(RectangleTest, TestIntersectionAbstraction)
     ASSERT_EQ(intersectionShape.getWidth(), 30);
     ASSERT_EQ(intersectionShape.getHeight(), 60);
 
-    ASSERT_TRUE(inter.getIntersectingRectangles().find(1) != inter.getIntersectingRectangles().end());
-    ASSERT_TRUE(inter.getIntersectingRectangles().find(2) != inter.getIntersectingRectangles().end());
+    std::set<Rectangle::ID> expectedMembers = {1, 2};
+    ASSERT_EQ(inter.getIntersectingRectangles(), expectedMembers);
 }
 
 } // namespace nitro

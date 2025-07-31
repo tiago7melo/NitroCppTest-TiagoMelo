@@ -40,6 +40,7 @@ class RectangleSet {
         FRIEND_TEST(RectangleSetTest, TestPairwiseIntersectionTwoOverlappingRects);
         FRIEND_TEST(RectangleSetTest, TestPairwiseIntersectionsCocentricRectangles);
         FRIEND_TEST(RectangleSetTest, TestPairwiseIntersectionOneRectangle);
+        FRIEND_TEST(RectangleSetTest, TestPairwiseIntersectionZeroRectangles);
 };
 
 } // namespace nitro
