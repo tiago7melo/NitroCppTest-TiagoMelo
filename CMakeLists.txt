@@ -14,21 +14,9 @@ set(MAIN_EXECUTABLE_NAME rectangle_intersect)
 set(TEST_EXECUTABLE_NAME tests)
 
 ## Enforce C++ standard
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Check for Compiler Compatibility
-include(CheckCXXCompilerFlag)
-if(MSVC)
-  check_cxx_compiler_flag("/std:c++20" COMPILER_SUPPORTED)
-else()
-  check_cxx_compiler_flag("-std=c++20" COMPILER_SUPPORTED)
-endif()
-
-if(NOT COMPILER_SUPPORTED) 
-  message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++20 support.")
-endif()
 
 # Fetch Dependencies
 include(FetchContent)
