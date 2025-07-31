@@ -47,8 +47,8 @@ class Rectangle {
 
         /* Functions */
         static std::optional<Rectangle> intersection(const Rectangle &rectangle1, const Rectangle &rectangle2);
-        // TODO: add intersect as member function
-        
+        std::optional<Rectangle> intersect(const Rectangle &rectangle);
+
         /* Static Error Messages */
         static const std::string vertexDefErrorMsg;
         static const std::string underflowErrorMsg;

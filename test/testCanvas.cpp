@@ -13,60 +13,61 @@ protected:
     }
 };
 
-TEST(CanvasTest, CreateFromSet) {
-    Rectangle rectangle1{1, {100, 100}, 250, 80};
-    Rectangle rectangle2{2, {100, 100}, 260, 80};
-    Rectangle rectangle3{3, {100, 100}, 270, 80};
-    Rectangle rectangle4{4, {100, 100}, 280, 80};
-    std::set<Rectangle> rectangles{rectangle1, rectangle2, rectangle3, rectangle4};
+TEST(CanvasTest, CreateFromVec) {
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {100, 100}, 260, 80},
+                                      {3, {100, 100}, 270, 80},
+                                      {4, {100, 100}, 280, 80}};
+
     Canvas canvas{rectangles};
     ASSERT_EQ(canvas.getRectangles().size(), 4);
 }
 
-TEST(CanvasTest, CreateFromSetNoDuplicateIDs) {
-    Rectangle rectangle1{1, {100, 100}, 250, 80};
-    Rectangle rectangle2{2, {100, 100}, 260, 80};
-    Rectangle rectangle3{3, {100, 100}, 270, 80};
-    Rectangle rectangle4{4, {100, 100}, 280, 80};
-    Rectangle rectangle5{1, {100, 100}, 250, 80};
-    std::set<Rectangle> rectangles{rectangle1, rectangle2, rectangle3, rectangle4, rectangle5};
-    Canvas canvas{rectangles};
-    ASSERT_EQ(canvas.getRectangles().size(), 4);
+TEST(CanvasTest, CreateFromVecNoDuplicateIDs) {
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {100, 100}, 260, 80},
+                                      {3, {100, 100}, 270, 80},
+                                      {4, {100, 100}, 280, 80},
+                                      {1, {100, 100}, 250, 80}};
+    
+    std::string check = "";
+    try {
+        Canvas canvas{rectangles};
+    } 
+    catch (const std::exception& e) {
+        check = e.what();
+    }
+    ASSERT_TRUE(check.contains(Canvas::duplicateIdErrorMsg));
+    
 }
 
 TEST(CanvasTest, SizeSanityCheck) {
-    Rectangle rectangle1{1, {100, 100}, 250, 80};
-    Rectangle rectangle2{2, {100, 100}, 260, 80};
-    Rectangle rectangle3{3, {100, 100}, 270, 80};
-    Rectangle rectangle4{4, {100, 100}, 280, 80};
-    Rectangle rectangle5{1, {100, 100}, 250, 80};
-    std::set<Rectangle> rectangles{rectangle1, rectangle2, rectangle3, rectangle4, rectangle5};
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {100, 100}, 260, 80},
+                                      {3, {100, 100}, 270, 80},
+                                      {4, {100, 100}, 280, 80}};
     Canvas canvas{rectangles};
     ASSERT_EQ(canvas.getRectangles().size(), rectangles.size());
 }
 
 TEST(CanvasTest, GetAtIndex) {
-    Rectangle rectangle1{1, {100, 100}, 250, 80};
-    Rectangle rectangle2{2, {100, 100}, 260, 80};
-    Rectangle rectangle3{3, {100, 100}, 270, 80};
-    Rectangle rectangle4{4, {100, 100}, 280, 80};
-    Rectangle rectangle5{1, {100, 100}, 250, 80};
-    std::set<Rectangle> rectangles{rectangle1, rectangle2, rectangle3, rectangle4, rectangle5};
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {100, 100}, 260, 80},
+                                      {3, {100, 100}, 270, 80},
+                                      {4, {100, 100}, 280, 80}};
     Canvas canvas{rectangles};
     // set is orderded so that index == id - 1
-    ASSERT_EQ(canvas.getRectangleAtIndex(0).getId(), rectangle1.getId());
-    ASSERT_EQ(canvas.getRectangleAtIndex(1).getId(), rectangle2.getId());
-    ASSERT_EQ(canvas.getRectangleAtIndex(2).getId(), rectangle3.getId());
-    ASSERT_EQ(canvas.getRectangleAtIndex(3).getId(), rectangle4.getId());
+    ASSERT_EQ(canvas.getRectangleAtIndex(0).getId(), rectangles[0].getId());
+    ASSERT_EQ(canvas.getRectangleAtIndex(1).getId(), rectangles[1].getId());
+    ASSERT_EQ(canvas.getRectangleAtIndex(2).getId(), rectangles[2].getId());
+    ASSERT_EQ(canvas.getRectangleAtIndex(3).getId(), rectangles[3].getId());
 }
 
 TEST(CanvasTest, GetAtIndexOutOfBounds) {
-    Rectangle rectangle1{1, {100, 100}, 250, 80};
-    Rectangle rectangle2{2, {100, 100}, 260, 80};
-    Rectangle rectangle3{3, {100, 100}, 270, 80};
-    Rectangle rectangle4{4, {100, 100}, 280, 80};
-    Rectangle rectangle5{1, {100, 100}, 250, 80};
-    std::set<Rectangle> rectangles{rectangle1, rectangle2, rectangle3, rectangle4, rectangle5};
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {100, 100}, 260, 80},
+                                      {3, {100, 100}, 270, 80},
+                                      {4, {100, 100}, 280, 80}};
     Canvas canvas{rectangles};
 
     std::string check = "";
@@ -83,10 +84,10 @@ TEST(CanvasTest, GetAtIndexOutOfBounds) {
 // Tests set of rectangles from the set in the exercise's specification
 // test/test_plots/T5SampleFromSpecification.png
 TEST(CanvasTest, PairwiseIntersectionsBaseCase) {
-    std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80},
-                                         {2, {120, 200}, 250, 150},
-                                         {3, {140, 160}, 250, 100},
-                                         {4, {160, 140}, 350, 190}};
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {120, 200}, 250, 150},
+                                      {3, {140, 160}, 250, 100},
+                                      {4, {160, 140}, 350, 190}};
 
     std::vector<std::set<Rectangle::ID>> interMembers = {{1, 3},
                                                          {1, 4}, 
@@ -100,7 +101,6 @@ TEST(CanvasTest, PairwiseIntersectionsBaseCase) {
                                           {4, {160, 200}, 210, 130},
                                           {5, {160, 160}, 230, 100}};
 
-    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
     std::optional<std::set<Canvas::RectangleIntersection>> intersect = canvas.determinePairwiseIntersections();
@@ -117,14 +117,14 @@ TEST(CanvasTest, PairwiseIntersectionsBaseCase) {
 
 // test/test_plots/T1NoIntersections.png
 TEST(CanvasTest, PairwiseIntersectionsNoIntersections) {
-    std::set<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
-                                    {2, {0, -120}, 120, 120},
-                                    {3, {-120, 0}, 120, 120},
-                                    {4, {0, 0}, 120, 120},
-                                    {5, {-280, -280}, 120, 120},
-                                    {6, {120, -280}, 120, 120},
-                                    {7, {-280, 160}, 120, 120},
-                                    {8, {120, 160}, 120, 120}}};
+    std::vector<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
+                                       {2, {0, -120}, 120, 120},
+                                       {3, {-120, 0}, 120, 120},
+                                       {4, {0, 0}, 120, 120},
+                                       {5, {-280, -280}, 120, 120},
+                                       {6, {120, -280}, 120, 120},
+                                       {7, {-280, 160}, 120, 120},
+                                       {8, {120, 160}, 120, 120}}};
 
     Canvas canvas{rectangles};
 
@@ -133,8 +133,8 @@ TEST(CanvasTest, PairwiseIntersectionsNoIntersections) {
 }
 // test/test_plots/T2SingleSimpleIntersections.png
 TEST(CanvasTest, PairwiseIntersectionsOneIntersection) {
-    std::set<Rectangle> rectangles{{{1, {-100, -100}, 250, 80}, 
-                                    {2, {-140, -160}, 250, 100}}};
+    std::vector<Rectangle> rectangles{{{1, {-100, -100}, 250, 80}, 
+                                       {2, {-140, -160}, 250, 100}}};
     Canvas canvas{rectangles};
 
     std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
@@ -154,10 +154,10 @@ TEST(CanvasTest, PairwiseIntersectionsOneIntersection) {
     
 }
 // test/test_plots/T3TwoOverlappingRectangles.png
-TEST(CanvasTest, TestPairwiseIntersectionTwoOverlappingRects) {
-    Rectangle r1{1, {-80, -80}, 160, 160};
-    Rectangle r2{2, {-80, -80}, 160, 160};
-    std::set<Rectangle> rectangles{r1, r2};
+TEST(CanvasTest, PairwiseIntersectionTwoOverlappingRects) {
+    std::vector<Rectangle> rectangles{{{1, {-80, -80}, 160, 160}, 
+                                       {2, {-80, -80}, 160, 160}}};
+
     Canvas canvas{rectangles};
 
     std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
@@ -180,10 +180,9 @@ TEST(CanvasTest, TestPairwiseIntersectionTwoOverlappingRects) {
 }
 // test/test_plots/T4TwoConcentricRectangles.png
 TEST(CanvasTest, PairwiseIntersectionsCocentricRectangles) {
-    Rectangle r1{1, {-110, -100}, 240, 240};
-    Rectangle r2{2, {-160, -140}, 340, 320};
+    std::vector<Rectangle> rectangles{{{1, {-110, -100}, 240, 240}, 
+                                       {2, {-160, -140}, 340, 320}}};
 
-    std::set<Rectangle> rectangles{r1, r2};
     Canvas canvas{rectangles};
 
     std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
@@ -205,18 +204,16 @@ TEST(CanvasTest, PairwiseIntersectionsCocentricRectangles) {
     ASSERT_EQ(intersectionOneShape.getHeight(), 240);
 }
 
-TEST(CanvasTest, TestPairwiseIntersectionOneRectangle) {
-    Rectangle r1{1, {-110, -100}, 240, 240};
-
-    std::set<Rectangle> rectangles{r1};
+TEST(CanvasTest, PairwiseIntersectionOneRectangle) {
+    std::vector<Rectangle> rectangles{{1, {-110, -100}, 240, 240}};
     Canvas canvas{rectangles};
 
     std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
     ASSERT_FALSE(interRet.has_value());
 }
 
-TEST(CanvasTest, TestPairwiseIntersectionZeroRectangles) {
-    std::set<Rectangle> rectangles{};
+TEST(CanvasTest, PairwiseIntersectionZeroRectangles) {
+    std::vector<Rectangle> rectangles{};
     Canvas canvas{rectangles};
 
     std::optional<std::set<Canvas::RectangleIntersection>> interRet = canvas.determinePairwiseIntersections();
@@ -224,9 +221,8 @@ TEST(CanvasTest, TestPairwiseIntersectionZeroRectangles) {
 }
 
 TEST(CanvasTest, IntersectAllWithOneRectangle) {
-    std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80}};
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80}};
 
-    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
     std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
@@ -234,7 +230,7 @@ TEST(CanvasTest, IntersectAllWithOneRectangle) {
 }
 
 TEST(CanvasTest, IntersectAllWithZeroRectangles) {
-    std::set<Rectangle> rectangles{};
+    std::vector<Rectangle> rectangles{};
     Canvas canvas{rectangles};
 
     std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
@@ -244,10 +240,10 @@ TEST(CanvasTest, IntersectAllWithZeroRectangles) {
 // Tests set of rectangles from the set in the exercise's specification
 // test/test_plots/T5SampleFromSpecification.png
 TEST(CanvasTest, IntersectAllWithExampleFromSpecification) {
-    std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80},
-                                         {2, {120, 200}, 250, 150},
-                                         {3, {140, 160}, 250, 100},
-                                         {4, {160, 140}, 350, 190}};
+    std::vector<Rectangle> rectangles{{1, {100, 100}, 250, 80},
+                                      {2, {120, 200}, 250, 150},
+                                      {3, {140, 160}, 250, 100},
+                                      {4, {160, 140}, 350, 190}};
 
     std::vector<std::set<Rectangle::ID>> interMembers = {{1, 3},
                                                          {1, 4}, 
@@ -265,7 +261,6 @@ TEST(CanvasTest, IntersectAllWithExampleFromSpecification) {
                                           {6, {160, 160}, 190, 20},
                                           {7, {160, 200}, 210, 60}};
 
-    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
     std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
@@ -279,14 +274,14 @@ TEST(CanvasTest, IntersectAllWithExampleFromSpecification) {
 
 // test/test_plots/T1NoIntersections.png
 TEST(CanvasTest, TestIntersectAllNoIntersections) {
-    std::set<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
-                                    {2, {0, -120}, 120, 120},
-                                    {3, {-120, 0}, 120, 120},
-                                    {4, {0, 0}, 120, 120},
-                                    {5, {-280, -280}, 120, 120},
-                                    {6, {120, -280}, 120, 120},
-                                    {7, {-280, 160}, 120, 120},
-                                    {8, {120, 160}, 120, 120}}};
+    std::vector<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
+                                       {2, {0, -120}, 120, 120},
+                                       {3, {-120, 0}, 120, 120},
+                                       {4, {0, 0}, 120, 120},
+                                       {5, {-280, -280}, 120, 120},
+                                       {6, {120, -280}, 120, 120},
+                                       {7, {-280, 160}, 120, 120},
+                                       {8, {120, 160}, 120, 120}}};
 
     Canvas canvas{rectangles};
 
@@ -296,10 +291,10 @@ TEST(CanvasTest, TestIntersectAllNoIntersections) {
 
 // test/test_plots/T6FourRectanglesAllIntersectEachOther.png
 TEST(CanvasTest, IntersectAllRectanglesIntersectEachother) {
-    std::vector<Rectangle> rectanglesVec{{1, {-160, -290}, 240, 240},
-                                         {2, {-230, -360}, 385, 385},
-                                         {3, {-325, -450}, 570, 570},
-                                         {4, {-390, -520}, 700, 700}};
+    std::vector<Rectangle> rectangles{{1, {-160, -290}, 240, 240},
+                                      {2, {-230, -360}, 385, 385},
+                                      {3, {-325, -450}, 570, 570},
+                                      {4, {-390, -520}, 700, 700}};
 
     std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2},
                                                          {1, 3}, 
@@ -313,19 +308,18 @@ TEST(CanvasTest, IntersectAllRectanglesIntersectEachother) {
                                                          {2, 3, 4},
                                                          {1, 2, 3, 4}};
     //index = ID - 1
-    std::vector<Rectangle> interShapes = {rectanglesVec[0],
-                                          rectanglesVec[0],
-                                          rectanglesVec[0],
-                                          rectanglesVec[1],
-                                          rectanglesVec[1],
-                                          rectanglesVec[2],
-                                          rectanglesVec[0],
-                                          rectanglesVec[0],
-                                          rectanglesVec[0],
-                                          rectanglesVec[1],
-                                          rectanglesVec[0]};
+    std::vector<Rectangle> interShapes = {rectangles[0],
+                                          rectangles[0],
+                                          rectangles[0],
+                                          rectangles[1],
+                                          rectangles[1],
+                                          rectangles[2],
+                                          rectangles[0],
+                                          rectangles[0],
+                                          rectangles[0],
+                                          rectangles[1],
+                                          rectangles[0]};
 
-    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
     Canvas canvas{rectangles};
 
     std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
@@ -337,6 +331,28 @@ TEST(CanvasTest, IntersectAllRectanglesIntersectEachother) {
     }
 }
 
-//TODO: only pairwise test
+// test/test_plots/T7MultiplePairwiseIntersections.png
+TEST(CanvasTest, IntersectAllOnlyPairwiseIntersections) {
+    std::vector<Rectangle> rectangles{{1, {-220, -210}, 120, 120},
+                                      {2, {-150, -150}, 120, 120},
+                                      {3, {40, 30}, 120, 120},
+                                      {4, {110, 90}, 120, 120}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2},
+                                                         {3, 4}};
+
+    std::vector<Rectangle> interShapes = {{1, {-150, -150}, 50, 60},
+                                          {2, {110, 90}, 50, 60}};
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+    ASSERT_EQ(intersections.size(), 2);
+
+    for (int i = 0; i < intersections.size(); i++) {
+        ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
+        ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
+    }
+}
 
 } // namespace nitro

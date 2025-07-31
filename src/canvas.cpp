@@ -1,14 +1,25 @@
 #include <stdexcept>
-#include "canvas.hpp"
 #include <iostream>
+#include "canvas.hpp"
 #include "rectangleIntersection.hpp"
 
 namespace nitro {
 
 const std::string Canvas::outOfRangeErrorMsg = "Index out of range";
+const std::string Canvas::duplicateIdErrorMsg = "Duplicate ID:";
 
-Canvas::Canvas(const std::set<Rectangle> &input) : rectangles{input} {
-    //TODO: consider warning if you're trying to put a rectangle with an ID that already exists?
+Canvas::Canvas(const std::vector<Rectangle> &input) {
+    std::set<Rectangle::ID> seen;
+
+    for (const auto& rect : input) {
+        int id = rect.getId();
+        if (seen.find(id) != seen.end()) {
+            throw::std::invalid_argument("Duplicate ID: " + std::to_string(id));
+        }
+
+        seen.insert(id);
+        rectangles.insert(rect);
+    }
 }
 
 std::set<Rectangle> Canvas::getRectangles() const {

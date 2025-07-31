@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <string>
 #include "rectangleIntersection.hpp"
 
 namespace nitro {
@@ -24,6 +25,20 @@ Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) cons
         auto it = intersectingRectangles.begin();
         std::advance(it, index);
         return *it;
+}
+
+std::string Canvas::RectangleIntersection::toString() const {
+    std::string result = "Between rectangles ";
+    for (Rectangle::ID id : intersectingRectangles) {
+        result += std::to_string(id) + ", ";
+    }
+    result += "at ";
+    Rectangle shape = this->getShape();
+    result += "(" + std::to_string(shape.getVertices().topLeft.x )+ ", " + 
+                    std::to_string(shape.getVertices().topLeft.y) + ") w=" + 
+                    std::to_string(shape.getWidth()) + ", h=" 
+                    + std::to_string(shape.getHeight());
+    return result;
 }
 
 } // namespace nitro

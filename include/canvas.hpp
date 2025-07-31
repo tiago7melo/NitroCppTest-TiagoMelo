@@ -19,7 +19,7 @@ class Canvas {
         class RectangleIntersection;  
 
         /* Constructors, Destructors*/
-        Canvas(const std::set<Rectangle> &rectangles);
+        Canvas(const std::vector<Rectangle> &input);
 
         /* Getters and Setters */
         size_t getRectangleCount() const;
@@ -33,6 +33,7 @@ class Canvas {
 
         /* Static Error Messages */
         static const std::string outOfRangeErrorMsg;
+        static const std::string duplicateIdErrorMsg;
     private:
         /* Internal Member Functions*/
         std::optional<std::set<RectangleIntersection>> determinePairwiseIntersections();
@@ -47,10 +48,10 @@ class Canvas {
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsBaseCase);
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsNoIntersections);
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsOneIntersection);
-        FRIEND_TEST(CanvasTest, TestPairwiseIntersectionTwoOverlappingRects);
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionTwoOverlappingRects);
         FRIEND_TEST(CanvasTest, PairwiseIntersectionsCocentricRectangles);
-        FRIEND_TEST(CanvasTest, TestPairwiseIntersectionOneRectangle);
-        FRIEND_TEST(CanvasTest, TestPairwiseIntersectionZeroRectangles);
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionOneRectangle);
+        FRIEND_TEST(CanvasTest, PairwiseIntersectionZeroRectangles);
         #endif
 };
 

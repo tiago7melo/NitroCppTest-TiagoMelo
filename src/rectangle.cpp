@@ -1,7 +1,6 @@
 #include <stdexcept>
 #include <limits>
 #include "rectangle.hpp"
-#include <iostream> //TODO: rm iostream later
 
 namespace nitro {
     
@@ -52,7 +51,7 @@ Rectangle::ID Rectangle::getId() const{
 
 void Rectangle::setId(Rectangle::ID id) {
     // Allow setting the ID freely for a Rectangle
-    // Canvas responsible for ensuring that IDs are unique
+    // Canvas class is responsible for ensuring that IDs for shapes are unique
     this->id = id;
 }
 
@@ -97,6 +96,10 @@ std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, co
     }
 
     return std::nullopt;
+}
+
+std::optional<Rectangle> Rectangle::intersect(const Rectangle &other) {
+    return Rectangle::intersection(*this, other);
 }
 
 } //namespace nitro

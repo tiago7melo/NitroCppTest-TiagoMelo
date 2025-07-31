@@ -30,6 +30,9 @@ class Canvas::RectangleIntersection {
     std::set<Rectangle::ID> getIntersectingRectangles() const;
     Rectangle::ID getRectIdAtIndex(size_t index) const;
 
+    /* Functions */
+    std::string toString() const;
+
     /* Static Error Messages */
     static const std::string outOfRangeErrorMsg;
 

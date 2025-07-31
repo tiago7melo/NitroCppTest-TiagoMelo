@@ -22,7 +22,6 @@ TEST(RectangleIntersectionTest, TestRectangleIntersectionSetOrdering) {
 
     ASSERT_EQ(intersection1.getRectIdAtIndex(0), 1);
     ASSERT_EQ(intersection1.getRectIdAtIndex(1), 3);
-
     ASSERT_EQ(intersection2.getRectIdAtIndex(0), 1);
     ASSERT_EQ(intersection2.getRectIdAtIndex(1), 4);
 
