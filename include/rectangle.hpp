@@ -30,6 +30,14 @@ class Rectangle {
             return this->getId() < other.getId();
         }
 
+        // implement equality
+        bool operator==(const Rectangle& other) const {
+            return this->getVertices().topLeft.x == other.getVertices().topLeft.x &&
+                   this->getVertices().topLeft.y == other.getVertices().topLeft.y &&
+                   this->getWidth() == other.getWidth() &&
+                   this->getHeight() == other.getHeight();
+        }
+
         /* Getters and Setters */
         ID getId() const;
         void setId(ID id);

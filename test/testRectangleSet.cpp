@@ -53,10 +53,10 @@ TEST(RectangleSetTest, GetAtIndex) {
     std::set<Rectangle> rectangles{rectangle1, rectangle2, rectangle3, rectangle4, rectangle5};
     RectangleSet rectangleSet{rectangles};
     // set is orderded so that index == id - 1
-    ASSERT_EQ(rectangleSet.atIndex(0).getId(), rectangle1.getId());
-    ASSERT_EQ(rectangleSet.atIndex(1).getId(), rectangle2.getId());
-    ASSERT_EQ(rectangleSet.atIndex(2).getId(), rectangle3.getId());
-    ASSERT_EQ(rectangleSet.atIndex(3).getId(), rectangle4.getId());
+    ASSERT_EQ(rectangleSet.getRectangleAtIndex(0).getId(), rectangle1.getId());
+    ASSERT_EQ(rectangleSet.getRectangleAtIndex(1).getId(), rectangle2.getId());
+    ASSERT_EQ(rectangleSet.getRectangleAtIndex(2).getId(), rectangle3.getId());
+    ASSERT_EQ(rectangleSet.getRectangleAtIndex(3).getId(), rectangle4.getId());
 }
 
 TEST(RectangleSetTest, GetAtIndexOutOfBounds) {
@@ -70,7 +70,7 @@ TEST(RectangleSetTest, GetAtIndexOutOfBounds) {
 
     std::string check = "";
     try {
-        rectangleSet.atIndex(5);
+        rectangleSet.getRectangleAtIndex(5);
     } 
     catch (const std::exception& e) {
         check = e.what();
@@ -224,5 +224,54 @@ TEST(RectangleSetTest, TestPairwiseIntersectionsCocentricRectangles) {
     ASSERT_EQ(intersectionOneShape.getWidth(), 240);
     ASSERT_EQ(intersectionOneShape.getHeight(), 240);
 }
+
+TEST(RectangleSetTest, TestPairwiseIntersectionOneRectangle) {
+    Rectangle r1{1, {-110, -100}, 240, 240};
+
+    std::set<Rectangle> rectangles{r1};
+    RectangleSet rectangleSet{rectangles};
+
+    std::optional<std::set<RectangleIntersection>> interRet = rectangleSet.determinePairwiseIntersections();
+    ASSERT_FALSE(interRet.has_value());
+}
+
+// Tests set of rectangles from the set in the exercise's specification
+// test/test_plots/T5SampleFromSpecification.png
+TEST(RectangleSetTest, IntersectAllWithExampleFromSpecification) {
+    std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80},
+                                         {2, {120, 200}, 250, 150},
+                                         {3, {140, 160}, 250, 100},
+                                         {4, {160, 140}, 350, 190}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 3},
+                                                         {1, 4}, 
+                                                         {2, 3},
+                                                         {2, 4},
+                                                         {3, 4},
+                                                         {1, 3, 4},
+                                                         {2, 3, 4}};
+
+    std::vector<Rectangle> interShapes = {{1, {140, 160}, 210, 20},
+                                          {2, {160, 140}, 190, 40},
+                                          {3, {140, 200}, 230, 60},
+                                          {4, {160, 200}, 210, 130},
+                                          {5, {160, 160}, 230, 100},
+                                          {6, {160, 160}, 190, 20},
+                                          {7, {160, 200}, 210, 60}};
+
+    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
+    RectangleSet rectangleSet{rectangles};
+
+    std::vector<RectangleIntersection> intersections = rectangleSet.intersectAll();
+    ASSERT_EQ(intersections.size(), 7);
+
+    for (int i = 0; i < intersections.size(); i++) {
+        ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
+        ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
+    }
+}
+
+//TODO: adapt tests considering equality operator for rectangle
+//TODO: add edge case validation to intersectAll
 
 } // namespace nitro

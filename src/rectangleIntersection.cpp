@@ -16,7 +16,7 @@ std::set<Rectangle::ID> RectangleIntersection::getIntersectingRectangles() const
     return intersectingRectangles; 
 }
 
-Rectangle::ID RectangleIntersection::atIndex(size_t index) const {
+Rectangle::ID RectangleIntersection::getRectIdAtIndex(size_t index) const {
         if(index >= intersectingRectangles.size()) {
             throw::std::out_of_range(RectangleIntersection::outOfRangeErrorMsg);
         }

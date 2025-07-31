@@ -20,11 +20,11 @@ TEST(RectangleIntersectionTest, TestRectangleIntersectionSetOrdering) {
     RectangleIntersection intersection2{interRet1, {s2r1.getId(), s2r2.getId()}};
     intersections.insert(intersection2);
 
-    ASSERT_EQ(intersection1.atIndex(0), 1);
-    ASSERT_EQ(intersection1.atIndex(1), 3);
+    ASSERT_EQ(intersection1.getRectIdAtIndex(0), 1);
+    ASSERT_EQ(intersection1.getRectIdAtIndex(1), 3);
 
-    ASSERT_EQ(intersection2.atIndex(0), 1);
-    ASSERT_EQ(intersection2.atIndex(1), 4);
+    ASSERT_EQ(intersection2.getRectIdAtIndex(0), 1);
+    ASSERT_EQ(intersection2.getRectIdAtIndex(1), 4);
 
     ASSERT_TRUE(intersection1 < intersection2);
 }
