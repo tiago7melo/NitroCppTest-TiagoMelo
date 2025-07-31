@@ -148,7 +148,6 @@ TEST(RectangleTest, TestSimpleIntersectionNoOverlap)
     ASSERT_FALSE(interRet.has_value());
 }
 
-// TODO: Originally plotted with draw.io, need to add plots for clarity
 TEST(RectangleTest, TestSimpleIntersectionFullOverlap) 
 {
     Rectangle rectangle{1, {100, 100}, 250, 80};

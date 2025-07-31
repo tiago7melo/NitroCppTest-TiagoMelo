@@ -81,7 +81,7 @@ TEST(RectangleSetTest, GetAtIndexOutOfBounds) {
 
 // Tests set of rectangles from the set in the exercise's specification
 // test/test_plots/T5SampleFromSpecification.png
-TEST(RectangleSetTest, TestPairwiseIntersections) {
+TEST(RectangleSetTest, PairwiseIntersectionsBaseCase) {
     std::vector<Rectangle> rectanglesVec{{1, {100, 100}, 250, 80},
                                          {2, {120, 200}, 250, 150},
                                          {3, {140, 160}, 250, 100},
@@ -115,7 +115,7 @@ TEST(RectangleSetTest, TestPairwiseIntersections) {
 }
 
 // test/test_plots/T1NoIntersections.png
-TEST(RectangleSetTest, TestPairwiseIntersectionsNoIntersections) {
+TEST(RectangleSetTest, PairwiseIntersectionsNoIntersections) {
     std::set<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
                                     {2, {0, -120}, 120, 120},
                                     {3, {-120, 0}, 120, 120},
@@ -131,7 +131,7 @@ TEST(RectangleSetTest, TestPairwiseIntersectionsNoIntersections) {
     ASSERT_FALSE(interRet.has_value());
 }
 // test/test_plots/T2SingleSimpleIntersections.png
-TEST(RectangleSetTest, TestPairwiseIntersectionsOneIntersection) {
+TEST(RectangleSetTest, PairwiseIntersectionsOneIntersection) {
     std::set<Rectangle> rectangles{{{1, {-100, -100}, 250, 80}, 
                                     {2, {-140, -160}, 250, 100}}};
     RectangleSet rectangleSet{rectangles};
@@ -153,7 +153,7 @@ TEST(RectangleSetTest, TestPairwiseIntersectionsOneIntersection) {
     
 }
 // test/test_plots/T3TwoOverlappingRectangles.png
-TEST(RectangleSetTest, TestPairwiseIntersectionTwoOverlappingRects) {
+TEST(RectangleSetTest, PairwiseIntersectionsIntersectionTwoOverlappingRects) {
     Rectangle r1{1, {-80, -80}, 160, 160};
     Rectangle r2{2, {-80, -80}, 160, 160};
     std::set<Rectangle> rectangles{r1, r2};
@@ -178,7 +178,7 @@ TEST(RectangleSetTest, TestPairwiseIntersectionTwoOverlappingRects) {
     ASSERT_EQ(intersectionOneShape.getHeight(), 160);
 }
 // test/test_plots/T4TwoConcentricRectangles.png
-TEST(RectangleSetTest, TestPairwiseIntersectionsCocentricRectangles) {
+TEST(RectangleSetTest, PairwiseIntersectionsCocentricRectangles) {
     Rectangle r1{1, {-110, -100}, 240, 240};
     Rectangle r2{2, {-160, -140}, 340, 320};
 
@@ -204,7 +204,7 @@ TEST(RectangleSetTest, TestPairwiseIntersectionsCocentricRectangles) {
     ASSERT_EQ(intersectionOneShape.getHeight(), 240);
 }
 
-TEST(RectangleSetTest, TestPairwiseIntersectionOneRectangle) {
+TEST(RectangleSetTest, PairwiseIntersectionsIntersectionOneRectangle) {
     Rectangle r1{1, {-110, -100}, 240, 240};
 
     std::set<Rectangle> rectangles{r1};
@@ -214,7 +214,7 @@ TEST(RectangleSetTest, TestPairwiseIntersectionOneRectangle) {
     ASSERT_FALSE(interRet.has_value());
 }
 
-TEST(RectangleSetTest, TestPairwiseIntersectionZeroRectangles) {
+TEST(RectangleSetTest, PairwiseIntersectionsIntersectionZeroRectangles) {
     std::set<Rectangle> rectangles{};
     RectangleSet rectangleSet{rectangles};
 
