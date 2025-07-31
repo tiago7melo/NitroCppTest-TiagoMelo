@@ -276,7 +276,64 @@ TEST(RectangleSetTest, IntersectAllWithExampleFromSpecification) {
     }
 }
 
-//TODO: adapt tests considering equality operator for rectangle
-//TODO: add edge case validation to intersectAll
+// test/test_plots/T1NoIntersections.png
+TEST(RectangleSetTest, TestIntersectAllNoIntersections) {
+    std::set<Rectangle> rectangles{{{1, {-120, -120}, 120, 120},
+                                    {2, {0, -120}, 120, 120},
+                                    {3, {-120, 0}, 120, 120},
+                                    {4, {0, 0}, 120, 120},
+                                    {5, {-280, -280}, 120, 120},
+                                    {6, {120, -280}, 120, 120},
+                                    {7, {-280, 160}, 120, 120},
+                                    {8, {120, 160}, 120, 120}}};
+
+    RectangleSet rectangleSet{rectangles};
+
+    std::vector<RectangleIntersection> interRet = rectangleSet.intersectAll();
+    ASSERT_EQ(interRet.size(), 0);
+}
+
+// test/test_plots/T6FourRectanglesAllIntersectEachOther.png
+TEST(RectangleSetTest, IntersectAllRectanglesIntersectEachother) {
+    std::vector<Rectangle> rectanglesVec{{1, {-160, -290}, 240, 240},
+                                         {2, {-230, -360}, 385, 385},
+                                         {3, {-325, -450}, 570, 570},
+                                         {4, {-390, -520}, 700, 700}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2},
+                                                         {1, 3}, 
+                                                         {1, 4},
+                                                         {2, 3},
+                                                         {2, 4},
+                                                         {3, 4},
+                                                         {1, 2, 3},
+                                                         {1, 2, 4},
+                                                         {1, 3, 4},
+                                                         {2, 3, 4},
+                                                         {1, 2, 3, 4}};
+    //index = ID - 1
+    std::vector<Rectangle> interShapes = {rectanglesVec[0],
+                                          rectanglesVec[0],
+                                          rectanglesVec[0],
+                                          rectanglesVec[1],
+                                          rectanglesVec[1],
+                                          rectanglesVec[2],
+                                          rectanglesVec[0],
+                                          rectanglesVec[0],
+                                          rectanglesVec[0],
+                                          rectanglesVec[1],
+                                          rectanglesVec[0]};
+
+    std::set<Rectangle> rectangles(rectanglesVec.begin(), rectanglesVec.end());
+    RectangleSet rectangleSet{rectangles};
+
+    std::vector<RectangleIntersection> intersections = rectangleSet.intersectAll();
+    ASSERT_EQ(intersections.size(), 11);
+
+    for (int i = 0; i < intersections.size(); i++) {
+        ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
+        ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
+    }
+}
 
 } // namespace nitro
