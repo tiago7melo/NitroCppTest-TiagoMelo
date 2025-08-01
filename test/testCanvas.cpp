@@ -349,4 +349,6 @@ TEST(CanvasTest, IntersectAllOnlyPairwiseIntersections) {
     }
 }
 
+//TODO: 20 rectangles to exceed the limit of 10?
+
 } // namespace nitro
