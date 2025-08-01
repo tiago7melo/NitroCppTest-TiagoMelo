@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "canvas.hpp"
-#include "rectangleIntersection.hpp"
+#include "Canvas.hpp"
+#include "RectangleIntersection.hpp"
 
 namespace nitro {
 

@@ -2,10 +2,10 @@
 #define NITRO_VERTEX_HPP
 
 namespace nitro {
-    typedef struct {
-        int x;
-        int y;
-    } Vertex;
+typedef struct {
+		int x;
+		int y;
+} Vertex;
 
-} //namespace nitro
+} // namespace nitro
 #endif // NITRO_VERTEX_HPP

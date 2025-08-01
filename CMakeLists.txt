@@ -4,7 +4,6 @@ project(RectangleIntersect VERSION 1.0 LANGUAGES CXX)
 # Cmake Environment Vars
 option(INSTALL_GTEST OFF)
 set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 ## Project Definitions
 set(INCLUDE_DIR include)
@@ -46,6 +45,7 @@ file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
 add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
+set_target_properties(${MAIN_EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 ## Link nlohmann::json (header-only)
 if(ENABLE_TESTS)
   # gtest_main must be linked because FRIEND_TEST declarations require it
@@ -63,7 +63,7 @@ if(ENABLE_TESTS)
   ## Test Files
   file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
   set(TEST_SRC_FILES ${SRC_FILES})
-  list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/main.cpp")
+  list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/Main.cpp")
 
   ## Test Executable
   # TODO: if mocks are needed, swap to an approach witth multiple test executables
@@ -73,5 +73,4 @@ if(ENABLE_TESTS)
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})
 endif()
-
 
