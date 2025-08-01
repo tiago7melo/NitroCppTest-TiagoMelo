@@ -4,8 +4,6 @@
 
 namespace nitro {
 
-const std::string Canvas::RectangleIntersection::outOfRangeErrorMsg = "Index out of range";
-
 Canvas::RectangleIntersection::RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members)
     : shape{shape}, intersectingRectangles{members} {
 
@@ -26,7 +24,7 @@ std::set<Rectangle::ID> Canvas::RectangleIntersection::getIntersectingRectangles
 
 Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) const {
 	if (index >= intersectingRectangles.size()) {
-		throw std::out_of_range(Canvas::RectangleIntersection::outOfRangeErrorMsg);
+		throw std::out_of_range("Index out of range"); //TODO: test this
 	}
 
 	auto it = intersectingRectangles.begin();

@@ -30,14 +30,11 @@ TEST(CanvasTest, CreateFromVecNoDuplicateIDs) {
                                       {4, {100, 100}, 280, 80},
                                       {1, {100, 100}, 250, 80}};
     
-    std::string check = "";
-    try {
-        Canvas canvas{rectangles};
-    } 
-    catch (const std::exception& e) {
-        check = e.what();
-    }
-    ASSERT_TRUE(check.contains(Canvas::duplicateIdErrorMsg));
+	try {
+		Canvas canvas{rectangles};
+	} catch (const std::invalid_argument &e) {
+        ASSERT_TRUE(std::string(e.what()).contains("Duplicate ID:"));
+	}
     
 }
 
@@ -70,15 +67,12 @@ TEST(CanvasTest, GetAtIndexOutOfBounds) {
                                       {4, {100, 100}, 280, 80}};
     Canvas canvas{rectangles};
 
-    std::string check = "";
-    try {
-        canvas.getRectangleAtIndex(5);
-    } 
-    catch (const std::exception& e) {
-        check = e.what();
-    }
-
-    ASSERT_EQ(check, Canvas::outOfRangeErrorMsg);
+    EXPECT_THROW(canvas.getRectangleAtIndex(5), std::out_of_range);
+	try {
+		canvas.getRectangleAtIndex(5);
+	} catch (const std::out_of_range &e) {
+        ASSERT_TRUE(std::string(e.what()).contains("Index out of range"));
+	}
 }
 
 // Tests set of rectangles from the set in the exercise's specification

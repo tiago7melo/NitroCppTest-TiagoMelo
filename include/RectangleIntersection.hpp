@@ -35,9 +35,6 @@ class Canvas::RectangleIntersection {
 		/* Functions */
 		std::string toString() const;
 
-		/* Static Error Messages */
-		static const std::string outOfRangeErrorMsg;
-
 	private:
 		/* Internal Members */
 		Rectangle shape;

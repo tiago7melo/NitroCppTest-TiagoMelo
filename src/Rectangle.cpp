@@ -4,26 +4,19 @@
 
 namespace nitro {
 
-const std::string Rectangle::vertexDefErrorMsg = "Vertex definition error";
-const std::string Rectangle::underflowErrorMsg = "Underflow error";
-const std::string Rectangle::overflowErrorMsg = "Overflow error";
-const std::string Rectangle::canvasXBoundExceededErrorMsg = "Rectangle exceeds canvas X bounds";
-const std::string Rectangle::canvasYBoundExceededErrorMsg = "Rectangle exceeds canvas Y bounds";
-const std::string Rectangle::invalidIdErrorMsg = "Rectangle IDs must be > 0";
-
 Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) {
 	// overflow, underflow checks
 	if (width == 0 || height == 0) {
-		throw std::overflow_error(Rectangle::underflowErrorMsg);
+		throw std::out_of_range("Rectangle width and height must be > 0");
 	}
 
 	const int64_t maxInt = std::numeric_limits<int>::max();
 	if (static_cast<int64_t>(topLeft.x) > maxInt - static_cast<int64_t>(width)) {
-		throw std::overflow_error(Rectangle::canvasXBoundExceededErrorMsg);
+		throw std::overflow_error("Rectangle exceeds canvas X bounds");
 	}
 
 	if (static_cast<int64_t>(topLeft.y) > maxInt - static_cast<int64_t>(height)) {
-		throw std::overflow_error(Rectangle::canvasYBoundExceededErrorMsg);
+		throw std::overflow_error("Rectangle exceeds canvas Y bounds");
 	}
 
 	// vertex calculation and validation
@@ -33,14 +26,14 @@ Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t 
 	vertices.bottomRight = {vertices.topRight.x, vertices.bottomLeft.y};
 
 	if (!Rectangle::validateVertices(vertices.bottomLeft, vertices.bottomRight, vertices.topLeft, vertices.topRight)) {
-		throw std::invalid_argument(Rectangle::vertexDefErrorMsg);
+		throw std::runtime_error("Rectangle vertice validation failed");
 	}
 
 	this->width = width;
 	this->height = height;
 
 	if (id == 0) {
-		throw std::invalid_argument(Rectangle::invalidIdErrorMsg);
+		throw std::invalid_argument("Rectangle IDs must be > 0");
 	}
 	this->id = id;
 }

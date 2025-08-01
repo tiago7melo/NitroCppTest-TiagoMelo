@@ -16,9 +16,9 @@ namespace nitro {
 class Canvas {
 	public:
 		/* Nested Classes */
-		class RectangleIntersection; 
-		//TODO: don't like it nested like this, uncouple the classes
-		// for that RectangleIntersection needs to store all the info on the Rects
+		class RectangleIntersection;
+		// TODO: don't like it nested like this, uncouple the classes
+		//  for that RectangleIntersection needs to store all the info on the Rects
 
 		/* Constructors, Destructors*/
 		Canvas(const std::vector<Rectangle> &input);
@@ -30,12 +30,9 @@ class Canvas {
 
 		/* Operations */
 		const std::vector<RectangleIntersection> intersectAll();
-		static std::optional<std::set<Rectangle>> fromJSON(std::string json,
-		                                                   size_t maxRectangles); // TODO: change to json structure
 		std::string toString() const;
 
 		/* Static Error Messages */
-		static const std::string outOfRangeErrorMsg;
 		static const std::string duplicateIdErrorMsg;
 
 	private:
