@@ -1,8 +1,8 @@
 #ifndef NITRO_INTERSECTION_HPP
 #define NITRO_INTERSECTION_HPP
 
-#include "canvas.hpp"
-#include "rectangle.hpp"
+#include "Canvas.hpp"
+#include "Rectangle.hpp"
 #include <optional>
 #include <set>
 

@@ -1,4 +1,4 @@
-#include "rectangleIntersection.hpp"
+#include "RectangleIntersection.hpp"
 #include <stdexcept>
 #include <string>
 
@@ -26,7 +26,7 @@ std::set<Rectangle::ID> Canvas::RectangleIntersection::getIntersectingRectangles
 
 Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) const {
 	if (index >= intersectingRectangles.size()) {
-		throw ::std::out_of_range(Canvas::RectangleIntersection::outOfRangeErrorMsg);
+		throw std::out_of_range(Canvas::RectangleIntersection::outOfRangeErrorMsg);
 	}
 
 	auto it = intersectingRectangles.begin();

@@ -1,5 +1,5 @@
-#include "canvas.hpp"
-#include "rectangleIntersection.hpp"
+#include "Canvas.hpp"
+#include "RectangleIntersection.hpp"
 #include <iostream>
 #include <stdexcept>
 
@@ -14,7 +14,7 @@ Canvas::Canvas(const std::vector<Rectangle> &input) {
 	for (const auto &rect : input) {
 		int id = rect.getId();
 		if (seen.find(id) != seen.end()) {
-			throw ::std::invalid_argument("Duplicate ID: " + std::to_string(id));
+			throw std::invalid_argument("Duplicate ID: " + std::to_string(id));
 		}
 
 		seen.insert(id);
@@ -32,7 +32,7 @@ size_t Canvas::getRectangleCount() const {
 
 Rectangle Canvas::getRectangleAtIndex(size_t index) const {
 	if (index >= rectangles.size()) {
-		throw ::std::out_of_range(Canvas::outOfRangeErrorMsg);
+		throw std::out_of_range(Canvas::outOfRangeErrorMsg);
 	}
 
 	auto it = rectangles.begin();

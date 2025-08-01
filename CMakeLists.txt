@@ -63,7 +63,7 @@ if(ENABLE_TESTS)
   ## Test Files
   file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
   set(TEST_SRC_FILES ${SRC_FILES})
-  list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/main.cpp")
+  list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/Main.cpp")
 
   ## Test Executable
   # TODO: if mocks are needed, swap to an approach witth multiple test executables
@@ -73,5 +73,4 @@ if(ENABLE_TESTS)
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})
 endif()
-
 

@@ -13,25 +13,28 @@ using json = nlohmann::json;
 
 class JsonHandler {
 	public:
+		/* Constructor, Destructor*/
 		JsonHandler();
 		explicit JsonHandler(const std::string &path);
+
+		/* Getters */
+		std::string getFilePath() const;
+		
+		/* Functions */
 		bool valid() const;
 		bool loadFile(const std::string &filePath);
+		std::optional<json> getArray(const std::string &key) const;
 
-		std::optional<json> getValueJson(const std::string &key);
-		std::optional<json> getArray(const std::string &key);
-		std::optional<int> getValueInt(const std::string &key);
-
-		// TODO: choose which approach
-		static const std::invalid_argument fileEmptyException;
-		static const std::string keyNotFoundErrorMsg;
-		static const std::string fileLoadingErrorMsg;
+		template <typename T>
+		static std::optional<T> unmarshal(json j);
 
 	private:
+		/* Member Variables*/
 		json jsonFile;
-		bool fileLoaded{false};
+		std::string filePath;
+		bool fileValid{false};
 };
 
 } // namespace nitro
 
-#endif // NITRO_JSONHANDLER_H
+#endif // NITRO_JSONHANDLER_

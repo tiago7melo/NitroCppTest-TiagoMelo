@@ -1,4 +1,4 @@
-#include "rectangle.hpp"
+#include "Rectangle.hpp"
 #include <limits>
 #include <stdexcept>
 
@@ -88,7 +88,7 @@ std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, co
 		uint32_t height = static_cast<uint32_t>(interBottomEdge - interTopEdge);
 		// RectangleIntersections will be  identified by the IDs of the intersecting rectangles
 		// the Rectangle shape that composes the RectangleIntersection doesn't need a unique ID
-		return Rectangle{1, topLeftVertexX, width, height};
+		return Rectangle{Rectangle::ID_UNDEFINED, topLeftVertexX, width, height};
 	}
 
 	return std::nullopt;

@@ -1,5 +1,5 @@
-#include "rectangle.hpp"
-#include "rectangleIntersection.hpp"
+#include "Rectangle.hpp"
+#include "RectangleIntersection.hpp"
 #include <iostream>
 
 using namespace nitro;

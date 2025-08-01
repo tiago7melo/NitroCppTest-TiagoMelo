@@ -1,7 +1,7 @@
 #ifndef NITRO_CANVAS_HPP
 #define NITRO_CANVAS_HPP
 
-#include "rectangle.hpp"
+#include "Rectangle.hpp"
 #include <optional>
 #include <set>
 #include <string>
@@ -16,7 +16,9 @@ namespace nitro {
 class Canvas {
 	public:
 		/* Nested Classes */
-		class RectangleIntersection;
+		class RectangleIntersection; 
+		//TODO: don't like it nested like this, uncouple the classes
+		// for that RectangleIntersection needs to store all the info on the Rects
 
 		/* Constructors, Destructors*/
 		Canvas(const std::vector<Rectangle> &input);

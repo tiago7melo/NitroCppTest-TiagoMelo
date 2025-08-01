@@ -1,7 +1,7 @@
 #ifndef NITRO_RECTANGLE_HPP
 #define NITRO_RECTANGLE_HPP
 
-#include "vertex.hpp"
+#include "Vertex.hpp"
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -11,8 +11,9 @@ namespace nitro {
 
 class Rectangle {
 	public:
-		/* Types */
+		/* Defines */
 		using ID = uint32_t;
+		static const ID ID_UNDEFINED = -1;
 
 		typedef struct {
 				Vertex bottomLeft;
