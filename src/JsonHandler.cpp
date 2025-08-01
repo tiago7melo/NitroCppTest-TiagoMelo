@@ -101,6 +101,7 @@ std::optional<std::vector<Rectangle>> JsonHandler::unmarshal(json j) {
 		throw std::runtime_error("JSON Object is not an array");
 	}
 	
+	//TODO: add max rectangles checks
 	std::vector<Rectangle> rects;
 	for (auto jsonObject : j ) {
 		std::optional<Rectangle> r = unmarshal<Rectangle>(jsonObject);

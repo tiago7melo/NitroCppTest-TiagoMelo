@@ -32,9 +32,6 @@ class Canvas {
 		const std::vector<RectangleIntersection> intersectAll();
 		std::string toString() const;
 
-		/* Static Error Messages */
-		static const std::string duplicateIdErrorMsg;
-
 	private:
 		/* Internal Member Functions*/
 		std::optional<std::set<RectangleIntersection>> determinePairwiseIntersections();
@@ -42,6 +39,7 @@ class Canvas {
 		determineAllIntersections(const std::set<RectangleIntersection> &pairwiseIntersections);
 
 		/* Member Variables */
+		// TODO: add max rectangle checks. should it be added here?
 		std::set<Rectangle> rectangles;
 
 /* For Testing */

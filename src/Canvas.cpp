@@ -5,8 +5,6 @@
 
 namespace nitro {
 
-const std::string Canvas::duplicateIdErrorMsg = "Duplicate ID:";
-
 Canvas::Canvas(const std::vector<Rectangle> &input) {
 	std::set<Rectangle::ID> seen;
 
