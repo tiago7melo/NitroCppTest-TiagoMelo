@@ -12,7 +12,7 @@ namespace nitro {
 using json = nlohmann::json;
 
 class JsonHandler {
-	public: //TODO: const checks
+	public:
 		/* Constructor, Destructor*/
 		JsonHandler();
 		explicit JsonHandler(const std::string &path);
