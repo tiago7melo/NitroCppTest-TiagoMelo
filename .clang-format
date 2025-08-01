@@ -1,0 +1,25 @@
+BasedOnStyle: LLVM
+
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+UseTab: ForIndentation
+IndentWidth: 4
+TabWidth: 4
+
+ColumnLimit: 120
+SeparateDefinitionBlocks: Always
+
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpacesInContainerLiterals: false
+
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignTrailingComments: true
+
+IndentAccessModifiers: true
+IndentCaseLabels: true
