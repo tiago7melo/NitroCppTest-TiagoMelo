@@ -5,7 +5,6 @@
 
 namespace nitro {
 
-const std::string Canvas::outOfRangeErrorMsg = "Index out of range";
 const std::string Canvas::duplicateIdErrorMsg = "Duplicate ID:";
 
 Canvas::Canvas(const std::vector<Rectangle> &input) {
@@ -32,7 +31,7 @@ size_t Canvas::getRectangleCount() const {
 
 Rectangle Canvas::getRectangleAtIndex(size_t index) const {
 	if (index >= rectangles.size()) {
-		throw std::out_of_range(Canvas::outOfRangeErrorMsg);
+		throw std::out_of_range("Index out of range");
 	}
 
 	auto it = rectangles.begin();

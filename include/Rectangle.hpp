@@ -50,14 +50,6 @@ class Rectangle {
 		static std::optional<Rectangle> intersection(const Rectangle &rectangle1, const Rectangle &rectangle2);
 		std::optional<Rectangle> intersect(const Rectangle &rectangle);
 
-		/* Static Error Messages */
-		static const std::string vertexDefErrorMsg;
-		static const std::string underflowErrorMsg;
-		static const std::string overflowErrorMsg;
-		static const std::string canvasXBoundExceededErrorMsg;
-		static const std::string canvasYBoundExceededErrorMsg;
-		static const std::string invalidIdErrorMsg;
-
 	private:
 		/* Internal Functions */
 		static bool validateVertices(const Vertex &bottomLeft, const Vertex &bottomRight, const Vertex &topLeft,
