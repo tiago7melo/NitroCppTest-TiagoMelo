@@ -6,3 +6,5 @@ CLI app that will find intersections of Axis-aligned rectangles given a JSON des
 
 
 # TODO: Ensure the root folder has a README file detailing any steps needed to build the code. 
+
+# TODO: specify that the build commands need to be ran from the root dir of the project
