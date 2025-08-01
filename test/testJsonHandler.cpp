@@ -5,8 +5,8 @@ namespace nitro {
 
 std::string getPathToTestFile(const std::string& filename) {
     std::filesystem::path cwd = std::filesystem::current_path();
-    std::cout << cwd << std::endl;
-    return std::filesystem::current_path().parent_path() / "test" / "test_files" / filename;
+    std::filesystem::path testFilePath = std::filesystem::current_path().parent_path() / "test" / "test_files" / filename;
+    return testFilePath.string();
 }
 
 TEST(JsonHandlerTest, EmptyFileThrowsException) {
@@ -96,7 +96,6 @@ TEST(JsonHandlerTest, GetRectanglesNotAnArray) {
     try {
 		std::optional<json> j = jsonHandler.getArray("rects");
 	} catch (const std::runtime_error &e) {
-        std::cout << e.what() << std::endl;
 		ASSERT_TRUE(std::string(e.what()) == "JSON Object at key [rects] is not an array");
 	}
 }
@@ -112,7 +111,6 @@ TEST(JsonHandlerTest, GetKeyThatDoesntExist) {
     try {
 		std::optional<json> j = jsonHandler.getArray("circles");
 	} catch (const std::runtime_error &e) {
-        std::cout << e.what() << std::endl;
 		ASSERT_TRUE(std::string(e.what()) == "JSON File does not contain key: circles");
 	}
 }
