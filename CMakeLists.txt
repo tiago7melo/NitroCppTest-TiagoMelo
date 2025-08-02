@@ -46,14 +46,7 @@ add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 set_target_properties(${MAIN_EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
-## Link nlohmann::json (header-only)
-if(ENABLE_TESTS)
-  # gtest_main must be linked because FRIEND_TEST declarations require it
-  target_compile_definitions(${MAIN_EXECUTABLE_NAME} PRIVATE TEST)
-  target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
-else()
-  target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json) #TODO: check if json needs to be linked since its header only
-endif()
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
 # Testing
 if(ENABLE_TESTS)
@@ -66,9 +59,8 @@ if(ENABLE_TESTS)
   list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/Main.cpp")
 
   ## Test Executable
-  # TODO: if mocks are needed, swap to an approach witth multiple test executables
-  # and replace the source files of the mocked classes for that particular test suite
   add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${TEST_SRC_FILES}) 
+  target_compile_definitions(${TEST_EXECUTABLE_NAME} PRIVATE TEST)
   target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})

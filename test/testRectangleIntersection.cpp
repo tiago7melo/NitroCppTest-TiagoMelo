@@ -42,4 +42,22 @@ TEST(RectangleIntersectionTest, GetIndexOutOfBounds) {
 	}
 }
 
+TEST(RectangleIntersectionTest, TestIntersectionAbstraction) {
+	Rectangle rectangle{1, {0, 0}, 250, 220};
+	Rectangle rectangle2{2, {-280, -190}, 310, 250};
+
+	std::optional<Rectangle> interRet = Rectangle::intersection(rectangle, rectangle2);
+	ASSERT_TRUE(interRet.has_value());
+	Canvas::RectangleIntersection inter = Canvas::RectangleIntersection(interRet.value(), {1, 2});
+
+	Rectangle intersectionShape = inter.getShape();
+	ASSERT_EQ(intersectionShape.getVertices().topLeft.x, 0);
+	ASSERT_EQ(intersectionShape.getVertices().topLeft.y, 0);
+	ASSERT_EQ(intersectionShape.getWidth(), 30);
+	ASSERT_EQ(intersectionShape.getHeight(), 60);
+
+	std::set<Rectangle::ID> expectedMembers = {1, 2};
+	ASSERT_EQ(inter.getIntersectingRectangles(), expectedMembers);
+}
+
 } // namespace nitro

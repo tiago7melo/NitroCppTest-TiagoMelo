@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-#TODO: take this from JSON file instead
 # Input rectangle data
 data = {
     "rects": [ 

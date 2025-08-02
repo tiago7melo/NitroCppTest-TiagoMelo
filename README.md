@@ -8,3 +8,10 @@ CLI app that will intersect axis aligned rectangles given a JSON file that descr
 # TODO: Ensure the root folder has a README file detailing any steps needed to build the code. 
 
 # TODO: specify that the build commands need to be ran from the root dir of the project
+
+
+# TODO: specify how to give the option to exceed try exceeding 10 rectangles
+
+
+C++ compiler supports C++23 : link to cppref
+Cmake 3.15+: link to cmake

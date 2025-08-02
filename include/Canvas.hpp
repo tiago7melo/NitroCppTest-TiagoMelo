@@ -17,11 +17,11 @@ class Canvas {
 	public:
 		/* Nested Classes */
 		class RectangleIntersection;
-		// TODO: don't like it nested like this, uncouple the classes
-		//  for that RectangleIntersection needs to store all the info on the Rects
 
 		/* Constructors, Destructors*/
+		Canvas() = default;
 		Canvas(const std::vector<Rectangle> &input);
+		~Canvas() = default;
 
 		/* Getters and Setters */
 		size_t getRectangleCount() const;
@@ -32,9 +32,6 @@ class Canvas {
 		const std::vector<RectangleIntersection> intersectAll();
 		std::string toString() const;
 
-		/* Static Error Messages */
-		static const std::string duplicateIdErrorMsg;
-
 	private:
 		/* Internal Member Functions*/
 		std::optional<std::set<RectangleIntersection>> determinePairwiseIntersections();
@@ -44,7 +41,7 @@ class Canvas {
 		/* Member Variables */
 		std::set<Rectangle> rectangles;
 
-/* For Testing */
+		/* For Testing */
 #ifdef TEST
 		friend class CanvasTest;
 		FRIEND_TEST(CanvasTest, PairwiseIntersectionsBaseCase);

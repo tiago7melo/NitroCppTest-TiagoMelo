@@ -7,11 +7,11 @@ namespace nitro {
 Canvas::RectangleIntersection::RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members)
     : shape{shape}, intersectingRectangles{members} {
 
-	// TODO: verify uniqueness of members IDs
-	// TODO: if we rework this to be uncoupled from Canvas, we'll need to verify
-	// that all IDs are valid
-	// TODO: IDs also have to be > 0, but that will be automatically checked if we
-	// change to std::set<Rectangle>
+	for (const auto &id : this->intersectingRectangles) {
+		if (id <= 0) {
+			throw std::invalid_argument("RectangleIntersection: All rectangle IDs must be > 0");
+		}
+	}
 }
 
 Rectangle Canvas::RectangleIntersection::getShape() const {
@@ -24,7 +24,7 @@ std::set<Rectangle::ID> Canvas::RectangleIntersection::getIntersectingRectangles
 
 Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) const {
 	if (index >= intersectingRectangles.size()) {
-		throw std::out_of_range("Index out of range"); //TODO: test this
+		throw std::out_of_range("Index out of range");
 	}
 
 	auto it = intersectingRectangles.begin();
@@ -34,10 +34,18 @@ Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) cons
 
 std::string Canvas::RectangleIntersection::toString() const {
 	std::string result = "Between rectangles ";
+	size_t i = 0;
 	for (Rectangle::ID id : intersectingRectangles) {
-		result += std::to_string(id) + ", ";
+		result += std::to_string(id);
+
+		if(i < intersectingRectangles.size() - 2) {
+			result += ", ";
+		} else if (i < intersectingRectangles.size() - 1) {
+			result += " and ";
+		}
+		i++;
 	}
-	result += "at ";
+	result += " at ";
 	Rectangle shape = this->getShape();
 	result += "(" + std::to_string(shape.getVertices().topLeft.x) + ", " +
 	          std::to_string(shape.getVertices().topLeft.y) + ") w=" + std::to_string(shape.getWidth()) +

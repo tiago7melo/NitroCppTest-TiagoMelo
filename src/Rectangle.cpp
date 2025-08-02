@@ -4,7 +4,8 @@
 
 namespace nitro {
 
-Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) {
+Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) 
+	: id(Rectangle::ID_UNDEFINED) {
 	// overflow, underflow checks
 	if (width == 0 || height == 0) {
 		throw std::out_of_range("Rectangle width and height must be > 0");
@@ -89,6 +90,11 @@ std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, co
 
 std::optional<Rectangle> Rectangle::intersect(const Rectangle &other) {
 	return Rectangle::intersection(*this, other);
+}
+
+std::string Rectangle::toString() const {
+	return std::to_string(id) + ": " + "Rectangle at ("+ std::to_string(vertices.topLeft.x) + "," +
+		   std::to_string(vertices.topLeft.y) + "), w=" + std::to_string(width) + ", h=" + std::to_string(height);
 }
 
 } // namespace nitro

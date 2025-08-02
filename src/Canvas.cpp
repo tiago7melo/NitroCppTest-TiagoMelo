@@ -5,11 +5,8 @@
 
 namespace nitro {
 
-const std::string Canvas::duplicateIdErrorMsg = "Duplicate ID:";
-
 Canvas::Canvas(const std::vector<Rectangle> &input) {
 	std::set<Rectangle::ID> seen;
-
 	for (const auto &rect : input) {
 		int id = rect.getId();
 		if (seen.find(id) != seen.end()) {
@@ -73,20 +70,20 @@ std::optional<std::set<Canvas::RectangleIntersection>> Canvas::determinePairwise
 	return result.empty() ? std::nullopt : std::make_optional(result);
 }
 
+// TODO: try to improve clarity of algorithm by showing its analogous to a BFS
 std::optional<std::set<Canvas::RectangleIntersection>>
 Canvas::determineAllIntersections(const std::set<RectangleIntersection> &pairwiseIntersections) {
 	// Determines all higher-order intersections: intersections with 3+ intersecting rectangles
 	std::set<RectangleIntersection> result{pairwiseIntersections.begin(), pairwiseIntersections.end()};
 	std::vector<RectangleIntersection> current{pairwiseIntersections.begin(), pairwiseIntersections.end()};
 	std::set<std::set<Rectangle::ID>> intersectionsFound;
-
 	bool moreIntersectionsHappened = true;
 	while (moreIntersectionsHappened) {
 		moreIntersectionsHappened = false;
 		std::vector<RectangleIntersection> next;
 		for (const RectangleIntersection &intersection : current) {
 			// All intersections are considered as virtual rectangles that can be intersected with the actual rectangles
-			// in order to form new higher-order intersections
+			// in order to form new higher-order intersections, that will be considered in the next iteration
 			for (size_t i = 0; i < this->rectangles.size(); i++) {
 				Rectangle::ID baseRectangleId = i + 1;
 				std::set<Rectangle::ID> intersectingRectangles = intersection.getIntersectingRectangles();
