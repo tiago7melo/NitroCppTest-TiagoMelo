@@ -32,6 +32,7 @@ Rectangle::ID Canvas::RectangleIntersection::getRectIdAtIndex(size_t index) cons
 	return *it;
 }
 
+//TODO: clean up toString()
 std::string Canvas::RectangleIntersection::toString() const {
 	std::string result = "Between rectangles ";
 	for (Rectangle::ID id : intersectingRectangles) {

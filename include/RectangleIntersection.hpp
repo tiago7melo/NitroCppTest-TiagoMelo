@@ -8,9 +8,10 @@
 
 namespace nitro {
 
-/* Rectangle Intersection specifically interoperates with information stored in
-   Canvas For identifying the IDs of intersecting rectangles, it is dependent on
-   the Canvas abstraction*/
+/* RectangleIntersection specifically interoperates with information stored in Canvas.
+   A RectangleIntersection is only created through Canvas functions.
+   A RectangleIntersection stores IDs of intersecting rectangles and the shape of the intersection.
+   To get the shape of the intersecting rectangles, the Canvas::getRectangleAtIndex() function is required. */
 class Canvas::RectangleIntersection {
 	public:
 		/* Constructors, Destructors*/

@@ -11,7 +11,8 @@ namespace nitro {
 
 using json = nlohmann::json;
 
-class JsonHandler {
+class JsonHandler { // TODO: JsonHandler : FileHander? instantiate a different one depending on the extension in the
+	                // input
 	public:
 		/* Constructor, Destructor*/
 		JsonHandler();
@@ -19,14 +20,13 @@ class JsonHandler {
 
 		/* Getters */
 		std::string getFilePath() const;
-		
+
 		/* Functions */
 		bool valid() const;
 		bool loadFile(const std::string &filePath);
 		std::optional<json> getArray(const std::string &key) const;
 
-		template <typename T>
-		static std::optional<T> unmarshal(json j);
+		template <typename T> static std::optional<T> unmarshal(json j);
 
 	private:
 		/* Member Variables*/

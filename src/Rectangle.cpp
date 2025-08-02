@@ -4,7 +4,8 @@
 
 namespace nitro {
 
-Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) {
+Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) 
+	: id(Rectangle::ID_UNDEFINED) {
 	// overflow, underflow checks
 	if (width == 0 || height == 0) {
 		throw std::out_of_range("Rectangle width and height must be > 0");
