@@ -34,17 +34,15 @@ class Canvas::RectangleIntersection {
 			return this->getIntersectingRectangles() < other.getIntersectingRectangles();
 		}
 
-		/* Getters and Setters */
+		/* Functions */
 		Rectangle getShape() const;
 		std::set<Rectangle::ID> getIntersectingRectangles() const;
 		Rectangle::ID getRectIdAtIndex(size_t index) const;
-
-		/* Functions */
 		std::string toString() const;
 
 	private:
 		friend class Canvas;
-		/* Private Constructor*/
+		/* Private Constructor */
 		// Only Canvas can create a RectangleIntersection through its intersection functions
 		RectangleIntersection(const Rectangle &shape, const std::set<Rectangle::ID> &members);
 

@@ -3,7 +3,8 @@
 
 namespace nitro {
 
-Application::Application(int argc, char **argv) : initialized(false), filePath(""), maxRectangles(DEFAULT_MAX_RECTS) {
+Application::Application(int argc, char **argv) 
+	: initialized(false), maxRectangles(Application::DEFAULT_MAX_RECTS) {
 	this->initialized = init(argc, argv);
 }
 
@@ -13,16 +14,12 @@ int Application::run() {
 	}
 
 	try {
-		std::optional<std::vector<Rectangle>> rectangles = loadRectangles(this->maxRectangles);
-		if (!rectangles.has_value()) {
-			std::cerr << "Error: No rectangles were defined in the input.\n";
-			return 1;
-		}
+		std::vector<Rectangle> rectangles = loadRectangles(this->maxRectangles);
 
-		Canvas canvas{rectangles.value()};
-		std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+		this->canvas = Canvas{rectangles};
+		std::vector<Canvas::RectangleIntersection> intersections = this->canvas.intersectAll();
 
-		printOutput(rectangles.value(), intersections);
+		printOutput(rectangles, intersections);
 
 	} catch (const std::exception &e) {
 		std::cerr << "Error: " << e.what() << "\n";
@@ -39,7 +36,6 @@ bool Application::init(int argc, char **argv) {
 		return false;
 	}
 
-	//TODO: checkArgCount should determine if this happens instead of doing another argcount check here
 	if (argc == 3) {
 		if (ErrorCode code = parseMaxRects(argv[2]); code != ErrorCode::Success) {
 			reportError(code);
@@ -71,7 +67,13 @@ Application::ErrorCode Application::checkArgCount(int argc) const {
 
 Application::ErrorCode Application::parseMaxRects(const char *arg) {
 	try {
+		std::string input(arg);
+		if (input[0] == '-') {
+			return ErrorCode::InvalidSizeArg;
+		}
+
 		this->maxRectangles = static_cast<size_t>(std::stoull(arg));
+
 	} catch (const std::exception &e) {
 		return ErrorCode::InvalidSizeArg;
 	}
@@ -82,7 +84,6 @@ Application::ErrorCode Application::parseMaxRects(const char *arg) {
 Application::ErrorCode Application::parseFile(const std::string &path) {
 	try {
 		jsonHandler.loadFile(path);
-		filePath = path;
 	} catch (const std::exception &e) {
 		std::cerr << "Error: " << e.what() << "\n";
 		return ErrorCode::InvalidFile;
@@ -91,14 +92,14 @@ Application::ErrorCode Application::parseFile(const std::string &path) {
 	return ErrorCode::Success;
 }
 
-std::optional<std::vector<Rectangle>> Application::loadRectangles(const size_t maxRectangles) const {
+std::vector<Rectangle> Application::loadRectangles(const size_t maxRectangles) const {
 	std::optional<json> j = jsonHandler.getArray("rects", maxRectangles);
 	if (!j.has_value()) {
-		return std::nullopt;
+		return std::vector<Rectangle>();
 	}
 
 	std::optional<std::vector<Rectangle>> rects = JsonHandler::unmarshal<std::vector<Rectangle>>(j);
-	return rects.has_value() ? rects : std::nullopt;
+	return rects.has_value() ? rects.value() : std::vector<Rectangle>();
 }
 
 void Application::printOutput(const std::vector<Rectangle> &rectangles,

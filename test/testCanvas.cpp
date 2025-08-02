@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
 #include "Canvas.hpp"
 #include "RectangleIntersection.hpp"
-
+#include <gtest/gtest.h>
+#include <cmath>
 namespace nitro {
 
 class CanvasTest : public ::testing::Test {
@@ -347,6 +347,25 @@ TEST(CanvasTest, IntersectAllOnlyPairwiseIntersections) {
         ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
         ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
     }
+}
+
+TEST(CanvasTest, IntersectTenOverlappingRectanglesMeetsSizeExpectation) {
+    std::vector<Rectangle> rectangles{{1, {-220, -210}, 120, 120},
+                                      {2, {-220, -210}, 120, 120},
+                                      {3, {-220, -210}, 120, 120},
+                                      {4, {-220, -210}, 120, 120},
+                                      {5, {-220, -210}, 120, 120},
+                                      {6, {-220, -210}, 120, 120},
+                                      {7, {-220, -210}, 120, 120},
+                                      {8, {-220, -210}, 120, 120},
+                                      {9, {-220, -210}, 120, 120},
+                                      {10, {-220, -210}, 120, 120}};
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+    // 2^10 minus the empty set minus subsets of size 1
+    ASSERT_EQ(intersections.size(), std::pow(2, 10) - 1 - 10);
 }
 
 //TODO: 20 rectangles to exceed the limit of 10?

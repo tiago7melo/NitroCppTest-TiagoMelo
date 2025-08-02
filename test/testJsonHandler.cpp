@@ -3,13 +3,23 @@
 #include <gtest/gtest.h>
 namespace nitro {
 
-std::string getPathToTestFile(const std::string& filename) {
-    std::filesystem::path cwd = std::filesystem::current_path();
-    std::filesystem::path testFilePath = std::filesystem::current_path().parent_path() / "test" / "test_files" / filename;
-    return testFilePath.string();
-}
+class JsonHandlerTest : public ::testing::Test {
+	protected:
+		void SetUp() override {
+		}
 
-TEST(JsonHandlerTest, EmptyFileThrowsException) {
+		void TearDown() override {
+		}
+
+		std::string getPathToTestFile(std::string filename) {
+			std::filesystem::path cwd = std::filesystem::current_path();
+			std::filesystem::path testFilePath =
+			    std::filesystem::current_path().parent_path() / "test" / "test_files" / filename;
+			return testFilePath.string();
+		}
+};
+
+TEST_F(JsonHandlerTest, EmptyFileThrowsException) {
 	std::string filePath = getPathToTestFile("test2-empty-file.json");
 	JsonHandler jsonHandler;
 	EXPECT_THROW(jsonHandler.loadFile(filePath), std::runtime_error);
@@ -20,7 +30,7 @@ TEST(JsonHandlerTest, EmptyFileThrowsException) {
 	}
 }
 
-TEST(JsonHandlerTest, InvalidFilePathThrowsException) {
+TEST_F(JsonHandlerTest, InvalidFilePathThrowsException) {
 	std::string filePath = getPathToTestFile("thisfiledoesntexist.json");
 	JsonHandler jsonHandler;
 	EXPECT_THROW(jsonHandler.loadFile(filePath), std::runtime_error);
@@ -31,7 +41,7 @@ TEST(JsonHandlerTest, InvalidFilePathThrowsException) {
 	}
 }
 
-TEST(JsonHandlerTest, InvalidJSONThrowsException) {
+TEST_F(JsonHandlerTest, InvalidJSONThrowsException) {
 	std::string filePath = getPathToTestFile("test3-invalid.json");
 	JsonHandler jsonHandler;
 	EXPECT_THROW(jsonHandler.loadFile(filePath), std::runtime_error);
@@ -42,7 +52,7 @@ TEST(JsonHandlerTest, InvalidJSONThrowsException) {
 	}
 }
 
-TEST(JsonHandlerTest, TryToOpenDirectoryThrowsException) {
+TEST_F(JsonHandlerTest, TryToOpenDirectoryThrowsException) {
 	std::string filePath = getPathToTestFile("");
 	JsonHandler jsonHandler;
 	EXPECT_THROW(jsonHandler.loadFile(filePath), std::invalid_argument);
@@ -53,7 +63,7 @@ TEST(JsonHandlerTest, TryToOpenDirectoryThrowsException) {
 	}
 }
 
-TEST(JsonHandlerTest, ValidFileLoads) {
+TEST_F(JsonHandlerTest, ValidFileLoads) {
 	std::string filePath = getPathToTestFile("test1-specification-example.json");
 	JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -61,7 +71,7 @@ TEST(JsonHandlerTest, ValidFileLoads) {
     ASSERT_TRUE(jsonHandler.valid());
 }
 
-TEST(JsonHandlerTest, GetArrayBaseCase) {
+TEST_F(JsonHandlerTest, GetArrayBaseCase) {
 	std::string filePath = getPathToTestFile("test1-specification-example.json");
 	JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -85,7 +95,7 @@ TEST(JsonHandlerTest, GetArrayBaseCase) {
     }
 }
 
-TEST(JsonHandlerTest, GetRectanglesNotAnArray) {
+TEST_F(JsonHandlerTest, GetRectanglesNotAnArray) {
     std::string filePath = getPathToTestFile("test6-notanarray.json");
     JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -100,7 +110,7 @@ TEST(JsonHandlerTest, GetRectanglesNotAnArray) {
 	}
 }
 
-TEST(JsonHandlerTest, GetKeyThatDoesntExist) {
+TEST_F(JsonHandlerTest, GetKeyThatDoesntExist) {
     std::string filePath = getPathToTestFile("test1-specification-example.json");
     JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -115,7 +125,7 @@ TEST(JsonHandlerTest, GetKeyThatDoesntExist) {
 	}
 }
 
-TEST(JsonHandlerTest, KeyDoesntExistInJson) {
+TEST_F(JsonHandlerTest, KeyDoesntExistInJson) {
     std::string filePath = getPathToTestFile("test7-keynotfound.json");
     JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -130,7 +140,7 @@ TEST(JsonHandlerTest, KeyDoesntExistInJson) {
 	}
 }
 
-TEST(JsonHandlerTest, UnmarshalSingleRectangleBaseCase) {
+TEST_F(JsonHandlerTest, UnmarshalSingleRectangleBaseCase) {
 	std::string filePath = getPathToTestFile("test4-singlerect.json");
 	JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -148,7 +158,7 @@ TEST(JsonHandlerTest, UnmarshalSingleRectangleBaseCase) {
     ASSERT_EQ(rect.value(), expected);
 }
 
-TEST(JsonHandlerTest, UnmarshalMalformedRectangle) {
+TEST_F(JsonHandlerTest, UnmarshalMalformedRectangle) {
 	std::string filePath = getPathToTestFile("test5-singlerect-missingfields.json");
 	JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -167,7 +177,7 @@ TEST(JsonHandlerTest, UnmarshalMalformedRectangle) {
 	}
 }
 
-TEST(JsonHandlerTest, UnmarshalRectanglesBaseCase) {
+TEST_F(JsonHandlerTest, UnmarshalRectanglesBaseCase) {
     std::string filePath = getPathToTestFile("test1-specification-example.json");
     JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);
@@ -190,7 +200,7 @@ TEST(JsonHandlerTest, UnmarshalRectanglesBaseCase) {
     ASSERT_EQ(rects.value(), expected);
 }
 
-TEST(JsonHandlerTest, UnMarshalRectanglesNotAnArray) {
+TEST_F(JsonHandlerTest, UnMarshalRectanglesNotAnArray) {
     std::string filePath = getPathToTestFile("test6-notanarray.json");
     JsonHandler jsonHandler;
     bool ret = jsonHandler.loadFile(filePath);

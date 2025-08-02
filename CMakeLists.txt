@@ -46,7 +46,7 @@ add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
 set_target_properties(${MAIN_EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
-target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json) #TODO: check if json needs to be linked since its header only
+target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
 # Testing
 if(ENABLE_TESTS)

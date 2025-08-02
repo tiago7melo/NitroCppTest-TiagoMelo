@@ -19,7 +19,9 @@ class Canvas {
 		class RectangleIntersection;
 
 		/* Constructors, Destructors*/
+		Canvas() = default;
 		Canvas(const std::vector<Rectangle> &input);
+		~Canvas() = default;
 
 		/* Getters and Setters */
 		size_t getRectangleCount() const;
