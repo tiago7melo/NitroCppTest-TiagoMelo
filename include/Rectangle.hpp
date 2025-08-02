@@ -49,7 +49,7 @@ class Rectangle {
 		/* Functions */
 		static std::optional<Rectangle> intersection(const Rectangle &rectangle1, const Rectangle &rectangle2);
 		std::optional<Rectangle> intersect(const Rectangle &rectangle);
-		std::string toString() const; // TODO: implement toString
+		std::string toString() const;
 
 	private:
 		/* Internal Functions */

@@ -7,7 +7,6 @@ namespace nitro {
 
 Canvas::Canvas(const std::vector<Rectangle> &input) {
 	std::set<Rectangle::ID> seen;
-
 	for (const auto &rect : input) {
 		int id = rect.getId();
 		if (seen.find(id) != seen.end()) {

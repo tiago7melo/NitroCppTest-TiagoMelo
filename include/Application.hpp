@@ -11,7 +11,7 @@
 namespace nitro {
 
 class Application {
-	public:
+	public: 
 		/* Defines */
 		static const size_t DEFAULT_MAX_RECTS = 10;
 
@@ -19,7 +19,6 @@ class Application {
 			Success = 0,
 			TooManyArguments,
 			MissingPathArg,
-			InvalidFileExtension,
 			InvalidSizeArg,
 			InvalidFile
 		};
@@ -36,10 +35,10 @@ class Application {
 		ErrorCode checkArgCount(int argc) const;
 		ErrorCode parseMaxRects(const char *arg);
 		ErrorCode parseFile(const std::string &path);
-		std::vector<Rectangle> handleInput(const std::string &input);
-		// TODO: just call Canvas.intersectAll directly instead of dedicating a whole function to it?
-		std::vector<Canvas::RectangleIntersection> handleIntersections(const std::vector<Rectangle> &rectangles);
-		void printOutput(const std::vector<Canvas::RectangleIntersection> &intersections) const;
+		std::optional<std::vector<Rectangle>> loadRectangles(const size_t maxRectangles) const;
+
+		void printOutput(const std::vector<Rectangle> &rectangles,
+		                 const std::vector<Canvas::RectangleIntersection> &intersections) const;
 		void printHelp();
 		void reportError(ErrorCode errorCode) const;
 

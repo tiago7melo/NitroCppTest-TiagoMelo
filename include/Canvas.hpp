@@ -17,8 +17,6 @@ class Canvas {
 	public:
 		/* Nested Classes */
 		class RectangleIntersection;
-		// TODO: don't like it nested like this, uncouple the classes
-		//  for that RectangleIntersection needs to store all the info on the Rects
 
 		/* Constructors, Destructors*/
 		Canvas(const std::vector<Rectangle> &input);
@@ -39,10 +37,9 @@ class Canvas {
 		determineAllIntersections(const std::set<RectangleIntersection> &pairwiseIntersections);
 
 		/* Member Variables */
-		// TODO: add max rectangle checks. should it be added here?
 		std::set<Rectangle> rectangles;
 
-/* For Testing */
+		/* For Testing */
 #ifdef TEST
 		friend class CanvasTest;
 		FRIEND_TEST(CanvasTest, PairwiseIntersectionsBaseCase);

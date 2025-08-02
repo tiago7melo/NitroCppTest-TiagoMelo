@@ -2,6 +2,5 @@
 #include <iostream>
 
 int main(int argc, char **argv) {
-	nitro::Application app(argc, argv);
-	return app.run();
+	return nitro::Application{argc, argv}.run();
 }

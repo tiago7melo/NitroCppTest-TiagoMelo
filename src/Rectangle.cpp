@@ -92,4 +92,9 @@ std::optional<Rectangle> Rectangle::intersect(const Rectangle &other) {
 	return Rectangle::intersection(*this, other);
 }
 
+std::string Rectangle::toString() const {
+	return std::to_string(id) + ": " + "Rectangle at ("+ std::to_string(vertices.topLeft.x) + "," +
+		   std::to_string(vertices.topLeft.y) + "), w=" + std::to_string(width) + ", h=" + std::to_string(height);
+}
+
 } // namespace nitro

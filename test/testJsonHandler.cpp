@@ -115,6 +115,21 @@ TEST(JsonHandlerTest, GetKeyThatDoesntExist) {
 	}
 }
 
+TEST(JsonHandlerTest, KeyDoesntExistInJson) {
+    std::string filePath = getPathToTestFile("test7-keynotfound.json");
+    JsonHandler jsonHandler;
+    bool ret = jsonHandler.loadFile(filePath);
+    ASSERT_TRUE(ret);
+    ASSERT_TRUE(jsonHandler.valid());
+
+    EXPECT_THROW(jsonHandler.getArray("rects"), std::runtime_error);
+    try {
+		std::optional<json> j = jsonHandler.getArray("rects");
+	} catch (const std::runtime_error &e) {
+		ASSERT_TRUE(std::string(e.what()) == "JSON File does not contain key: rects");
+	}
+}
+
 TEST(JsonHandlerTest, UnmarshalSingleRectangleBaseCase) {
 	std::string filePath = getPathToTestFile("test4-singlerect.json");
 	JsonHandler jsonHandler;

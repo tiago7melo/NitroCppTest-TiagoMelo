@@ -59,8 +59,6 @@ if(ENABLE_TESTS)
   list(REMOVE_ITEM TEST_SRC_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR}/Main.cpp")
 
   ## Test Executable
-  # TODO: if mocks are needed, swap to an approach witth multiple test executables
-  # and replace the source files of the mocked classes for that particular test suite
   add_executable(${TEST_EXECUTABLE_NAME} ${TEST_FILES} ${TEST_SRC_FILES}) 
   target_compile_definitions(${TEST_EXECUTABLE_NAME} PRIVATE TEST)
   target_include_directories(${TEST_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})

@@ -56,7 +56,7 @@ std::string JsonHandler::getFilePath() const {
 	return this->filePath;
 }
 
-std::optional<json> JsonHandler::getArray(const std::string &key) const {
+std::optional<json> JsonHandler::getArray(const std::string &key, const size_t maxSize) const {
 	if (!this->valid()) {
 		throw std::runtime_error("Trying to perform operation on invalid JSON File");
 	}
@@ -69,11 +69,13 @@ std::optional<json> JsonHandler::getArray(const std::string &key) const {
 		throw std::runtime_error("JSON Object at key [" + key + "] is not an array");
 	}
 
-	if (jsonFile.contains(key) and jsonFile.at(key).is_array()) {
-		return jsonFile.at(key);
+	const json &array = jsonFile.at(key);
+
+	if (array.size() > maxSize) {
+		return json(array.begin(), array.begin() + maxSize);
 	}
 
-	return std::nullopt;
+	return array.empty() ? std::nullopt : std::make_optional(array);
 }
 
 template <typename T> 
@@ -101,12 +103,14 @@ std::optional<std::vector<Rectangle>> JsonHandler::unmarshal(json j) {
 		throw std::runtime_error("JSON Object is not an array");
 	}
 	
-	//TODO: add max rectangles checks
 	std::vector<Rectangle> rects;
+	Rectangle::ID id = 1;
 	for (auto jsonObject : j ) {
 		std::optional<Rectangle> r = unmarshal<Rectangle>(jsonObject);
 		if (r.has_value()) {
-			rects.push_back(r.value());
+			Rectangle rect = r.value();
+			rect.setId(id++);
+			rects.push_back(rect);
 		}
 	}
 
