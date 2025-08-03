@@ -21,21 +21,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(FetchContent)
 
 ## nlohmann::json
+message("Fetching dependency for nlohmann::json...")
 FetchContent_Declare(
   json
   GIT_REPOSITORY https://github.com/nlohmann/json.git
-  GIT_TAG v3.12.0  #TODO: replace with commit hash, dependency lock
-  # TODO: see if can find_package_args
+  GIT_TAG 55f93686c01528224f448c19128836e7df245f72 # v3.12.0
 )
 FetchContent_MakeAvailable(json)
 
 if(ENABLE_TESTS)
   ## GoogleTest
+  message("Fetching dependency for GoogleTest...")
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG v1.17.0 #TODO: dependency lock
-    FIND_PACKAGE_ARGS NAMES GTest
+    GIT_TAG 52eb8108c5bdec04579160ae17225d66034bd723 # v1.17.0
   )
   FetchContent_MakeAvailable(googletest)
 endif()
@@ -45,7 +45,12 @@ file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
 add_executable(${MAIN_EXECUTABLE_NAME} ${SRC_FILES})
 ## Main executable header files
 target_include_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${INCLUDE_DIR})
-set_target_properties(${MAIN_EXECUTABLE_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
+set_target_properties(${MAIN_EXECUTABLE_NAME} PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}"
+  RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}"
+  RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_SOURCE_DIR}"
+  RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${CMAKE_SOURCE_DIR}"
+)
 target_link_libraries(${MAIN_EXECUTABLE_NAME} PRIVATE nlohmann_json::nlohmann_json)
 
 # Testing

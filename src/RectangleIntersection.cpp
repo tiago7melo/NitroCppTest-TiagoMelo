@@ -38,7 +38,7 @@ std::string Canvas::RectangleIntersection::toString() const {
 	for (Rectangle::ID id : intersectingRectangles) {
 		result += std::to_string(id);
 
-		if(i < intersectingRectangles.size() - 2) {
+		if (i < intersectingRectangles.size() - 2) {
 			result += ", ";
 		} else if (i < intersectingRectangles.size() - 1) {
 			result += " and ";

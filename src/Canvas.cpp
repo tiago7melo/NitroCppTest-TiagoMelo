@@ -77,13 +77,15 @@ Canvas::determineAllIntersections(const std::set<RectangleIntersection> &pairwis
 	std::set<RectangleIntersection> result{pairwiseIntersections.begin(), pairwiseIntersections.end()};
 	std::vector<RectangleIntersection> current{pairwiseIntersections.begin(), pairwiseIntersections.end()};
 	std::set<std::set<Rectangle::ID>> intersectionsFound;
+
 	bool moreIntersectionsHappened = true;
 	while (moreIntersectionsHappened) {
 		moreIntersectionsHappened = false;
 		std::vector<RectangleIntersection> next;
 		for (const RectangleIntersection &intersection : current) {
 			// All intersections are considered as virtual rectangles that can be intersected with the actual rectangles
-			// in order to form new higher-order intersections, that will be considered in the next iteration
+			// in order to form new higher-order intersections, that will be considered as virtual rectangles in the
+			// next iteration
 			for (size_t i = 0; i < this->rectangles.size(); i++) {
 				Rectangle::ID baseRectangleId = i + 1;
 				std::set<Rectangle::ID> intersectingRectangles = intersection.getIntersectingRectangles();
@@ -92,6 +94,7 @@ Canvas::determineAllIntersections(const std::set<RectangleIntersection> &pairwis
 					continue;
 				}
 
+				// Virtual Intersection Rectangle intersects with Actual Rectangle
 				std::optional<Rectangle> intersectionShape =
 				    Rectangle::intersection(intersection.getShape(), this->getRectangleAtIndex(i));
 				if (!intersectionShape.has_value()) {
