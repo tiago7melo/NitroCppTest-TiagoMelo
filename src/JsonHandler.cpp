@@ -91,7 +91,7 @@ template <> std::optional<Rectangle> JsonHandler::unmarshal(json j) {
 		int y = j["y"].get<int>();
 		int w = j["w"].get<int>();
 		int h = j["h"].get<int>();
-		std::cout << "x: " << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
+		
 		if (w < 0 || h < 0) {
 			throw std::runtime_error("Rectangle width and height must be non-negative");
 		}
@@ -100,11 +100,8 @@ template <> std::optional<Rectangle> JsonHandler::unmarshal(json j) {
 			throw std::runtime_error("Rectangle cannot be a point (width and height both zero)");
 		}
 
-		if (w >= 0 && h >= 0) {
-			return Rectangle(Rectangle::ID_UNDEFINED, {x, y}, static_cast<uint32_t>(w), static_cast<uint32_t>(h));
-		} else {
-			throw std::runtime_error("Rectangle width and height must be non-negative");
-		}
+		return Rectangle(Rectangle::ID_UNDEFINED, {x, y}, static_cast<uint32_t>(w), static_cast<uint32_t>(h));
+
 	} else {
 		throw std::runtime_error("JSON Object does not define a rectangle");
 	}
@@ -121,7 +118,6 @@ template <> std::optional<std::vector<Rectangle>> JsonHandler::unmarshal(json j)
 	Rectangle::ID id = 1;
 	for (auto jsonObject : j) {
 		std::optional<Rectangle> r = unmarshal<Rectangle>(jsonObject);
-		std::cout << "id: " << id << "\n";
 		if (r.has_value()) {
 			Rectangle rect = r.value();
 			rect.setId(id++);

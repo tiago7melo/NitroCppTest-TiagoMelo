@@ -96,7 +96,6 @@ std::vector<Rectangle> Application::loadRectangles(const size_t maxRectangles) c
 	if (!j.has_value()) {
 		return std::vector<Rectangle>();
 	}
-	std::cout << "Loaded " << j.value().size() << " rectangles from file.\n";
 	std::optional<std::vector<Rectangle>> rects = JsonHandler::unmarshal<std::vector<Rectangle>>(j);
 	return rects.has_value() ? rects.value() : std::vector<Rectangle>();
 }

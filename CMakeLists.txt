@@ -71,3 +71,7 @@ if(ENABLE_TESTS)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})
 endif()
 
+install(TARGETS ${MAIN_EXECUTABLE_NAME}
+        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR})
+
+
