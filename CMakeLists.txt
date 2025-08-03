@@ -25,7 +25,7 @@ message("Fetching dependency for nlohmann::json...")
 FetchContent_Declare(
   json
   GIT_REPOSITORY https://github.com/nlohmann/json.git
-  GIT_TAG v3.12.0  #TODO: replace with commit hash, dependency lock
+  GIT_TAG 55f93686c01528224f448c19128836e7df245f72 # v3.12.0
 )
 FetchContent_MakeAvailable(json)
 
@@ -35,7 +35,7 @@ if(ENABLE_TESTS)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG v1.17.0 #TODO: dependency lock
+    GIT_TAG 52eb8108c5bdec04579160ae17225d66034bd723 # v1.17.0
   )
   FetchContent_MakeAvailable(googletest)
 endif()
