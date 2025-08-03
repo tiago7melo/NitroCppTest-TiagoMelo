@@ -6,9 +6,12 @@ namespace nitro {
 
 Rectangle::Rectangle(Rectangle::ID id, Vertex topLeft, uint32_t width, uint32_t height) 
 	: id(Rectangle::ID_UNDEFINED) {
-	// overflow, underflow checks
-	if (width == 0 || height == 0) {
-		throw std::out_of_range("Rectangle width and height must be > 0");
+	
+	// From specification: "Width and height are integers that are never negative."
+	// Which means that Line rectangles are allowed (width=0 or height=0)
+	// but if width == 0 and height == 0, that's a point.
+	if (width == 0 && height == 0) {
+		throw std::invalid_argument("Rects can't be points. Width or Height must be > 0");
 	}
 
 	const int64_t maxInt = std::numeric_limits<int>::max();
@@ -63,8 +66,12 @@ uint32_t Rectangle::getHeight() const {
 
 bool Rectangle::validateVertices(const Vertex &bottomLeft, const Vertex &bottomRight, const Vertex &topLeft,
                                  const Vertex &topRight) {
-	return bottomLeft.y == bottomRight.y && bottomLeft.x == topLeft.x && bottomRight.x == topRight.x &&
-	       topLeft.y == topRight.y && bottomLeft.x < topRight.x && bottomLeft.y > topRight.y;
+	return bottomLeft.y == bottomRight.y 
+		&& bottomLeft.x == topLeft.x 
+		&& bottomRight.x == topRight.x 
+		&& topLeft.y == topRight.y 
+		&& bottomLeft.x <= topRight.x 
+		&& bottomLeft.y >= topRight.y;
 }
 
 std::optional<Rectangle> Rectangle::intersection(const Rectangle &rectangle1, const Rectangle &rectangle2) {

@@ -134,4 +134,17 @@ TEST_F(ApplicationTest, LoadRectanglesDefaultMaxRectCount) {
     ASSERT_EQ(rectangles.size(), maxRects);
 }
 
+TEST_F(ApplicationTest, LoadRectanglesOverridesDefault) {
+    std::string path = getPathToTestFile("test10-twelverectangles.json");
+    std::vector<std::string> args = {"rectangle_intersect", path};    
+    std::vector<char *> argv = createArgv(args);
+
+    Application app(argv.size(), argv.data());
+    ASSERT_TRUE(app.init(argv.size(), argv.data()));
+
+    size_t maxRects = 12;
+    std::vector<Rectangle> rectangles = app.loadRectangles(maxRects);
+    ASSERT_EQ(rectangles.size(), maxRects);
+}
+
 } // namespace nitro

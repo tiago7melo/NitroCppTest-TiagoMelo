@@ -3,30 +3,8 @@
 
 namespace nitro {
 
-Application::Application(int argc, char **argv) 
-	: initialized(false), maxRectangles(Application::DEFAULT_MAX_RECTS) {
+Application::Application(int argc, char **argv) : initialized(false), maxRectangles(Application::DEFAULT_MAX_RECTS) {
 	this->initialized = init(argc, argv);
-}
-
-int Application::run() {
-	if (!this->initialized) {
-		return 1;
-	}
-
-	try {
-		std::vector<Rectangle> rectangles = loadRectangles(this->maxRectangles);
-
-		this->canvas = Canvas{rectangles};
-		std::vector<Canvas::RectangleIntersection> intersections = this->canvas.intersectAll();
-
-		printOutput(rectangles, intersections);
-
-	} catch (const std::exception &e) {
-		std::cerr << "Error: " << e.what() << "\n";
-		return 1;
-	}
-
-	return 0;
 }
 
 bool Application::init(int argc, char **argv) {
@@ -51,6 +29,27 @@ bool Application::init(int argc, char **argv) {
 	}
 
 	return true;
+}
+
+int Application::run() {
+	if (!this->initialized) {
+		return 1;
+	}
+
+	try {
+		std::vector<Rectangle> rectangles = loadRectangles(this->maxRectangles);
+
+		this->canvas = Canvas{rectangles};
+		std::vector<Canvas::RectangleIntersection> intersections = this->canvas.intersectAll();
+
+		printOutput(rectangles, intersections);
+
+	} catch (const std::exception &e) {
+		std::cerr << "Error: " << e.what() << "\n";
+		return 1;
+	}
+
+	return 0;
 }
 
 Application::ErrorCode Application::checkArgCount(int argc) const {

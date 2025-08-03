@@ -21,21 +21,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(FetchContent)
 
 ## nlohmann::json
+message("Fetching dependency for nlohmann::json...")
 FetchContent_Declare(
   json
   GIT_REPOSITORY https://github.com/nlohmann/json.git
   GIT_TAG v3.12.0  #TODO: replace with commit hash, dependency lock
-  # TODO: see if can find_package_args
 )
 FetchContent_MakeAvailable(json)
 
 if(ENABLE_TESTS)
   ## GoogleTest
+  message("Fetching dependency for GoogleTest...")
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
     GIT_TAG v1.17.0 #TODO: dependency lock
-    FIND_PACKAGE_ARGS NAMES GTest
   )
   FetchContent_MakeAvailable(googletest)
 endif()

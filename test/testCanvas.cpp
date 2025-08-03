@@ -231,6 +231,16 @@ TEST(CanvasTest, IntersectAllWithZeroRectangles) {
     ASSERT_EQ(intersections.size(), 0);
 }
 
+TEST(CanvasTest, IntersectRectanglesAwithBisSameAsBwithA) {
+    std::vector<Rectangle> rectangles{{1, {-160, -160}, 80, 80},
+                                      {2, {-160, -160}, 80, 80}};
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+    ASSERT_EQ(intersections.size(), 1);
+}
+
 // Tests set of rectangles from the set in the exercise's specification
 // test/test_plots/T5SampleFromSpecification.png
 TEST(CanvasTest, IntersectAllWithExampleFromSpecification) {
@@ -349,6 +359,70 @@ TEST(CanvasTest, IntersectAllOnlyPairwiseIntersections) {
     }
 }
 
+// test/test_plots/T8RectsOnlyTouchingCorners.png
+TEST(CanvasTest, IntersectRectanglesOnlyTouchingCorners) {
+    std::vector<Rectangle> rectangles{{1, {-160, -160}, 80, 80},
+                                      {2, {-80, -80}, 80, 80},
+                                      {3, {0, 0}, 80, 80},
+                                      {4, {80, 80}, 80, 80}};
+
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+    ASSERT_EQ(intersections.size(), 0);
+}
+
+// test/test_plots/T9MultipleSameShapeIntersections.png
+TEST(CanvasTest, IntersectAllIntersectionsHaveSameShape) {
+    std::vector<Rectangle> rectangles{{1, {-70, -110}, 120, 380},
+                                      {2, {-140, 0}, 270, 270},
+                                      {3, {-70, 0}, 120, 380}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2},
+                                                         {1, 3},
+                                                         {2, 3},
+                                                         {1, 2, 3}};
+
+    std::vector<Rectangle> interShapes = {{1, {-70, 0}, 120, 270},
+                                          {2, {-70, 0}, 120, 270},
+                                          {3, {-70, 0}, 120, 270},
+                                          {4, {-70, 0}, 120, 270}};
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+    ASSERT_EQ(intersections.size(), 4);
+
+    for (int i = 0; i < intersections.size(); i++) {
+        ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
+        ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
+    }
+}
+
+// test/test_plots/T10ChainOverlaps.png
+TEST(CanvasTest, IntersectAllChainOverlaps) {
+    std::vector<Rectangle> rectangles{{1, {-160, -40}, 160, 160},
+                                      {2, {-80, -40}, 160, 160},
+                                      {3, {0, -40}, 160, 160}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2},
+                                                         {2, 3}};
+
+    std::vector<Rectangle> interShapes = {{1, {-80, -40}, 80, 160},
+                                          {2, {0, -40}, 80, 160}};
+
+    Canvas canvas{rectangles};
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+
+    ASSERT_EQ(intersections.size(), 2);
+
+    for (int i = 0; i < intersections.size(); ++i) {
+        ASSERT_EQ(intersections[i].getIntersectingRectangles(), interMembers[i]);
+        ASSERT_EQ(intersections[i].getShape(), interShapes[i]);
+    }
+}
+
 TEST(CanvasTest, IntersectTenOverlappingRectanglesMeetsSizeExpectation) {
     std::vector<Rectangle> rectangles{{1, {-220, -210}, 120, 120},
                                       {2, {-220, -210}, 120, 120},
@@ -368,6 +442,96 @@ TEST(CanvasTest, IntersectTenOverlappingRectanglesMeetsSizeExpectation) {
     ASSERT_EQ(intersections.size(), std::pow(2, 10) - 1 - 10);
 }
 
-//TODO: 20 rectangles to exceed the limit of 10?
+TEST(CanvasTest, IntersectAllLineRectanglesExcluded) {
+    std::vector<Rectangle> rectangles{{1, {0, 0}, 100, 100},       
+                                      {2, {50, 0}, 0, 100},        
+                                      {3, {0, 50}, 100, 0},        
+                                      {4, {150, 150}, 0, 100},     
+                                      {5, {150, 150}, 100, 0}};
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+
+    ASSERT_EQ(intersections.size(), 0);
+}
+
+TEST(CanvasTest, IntersectAllLineRectanglesCrossAtPoint) {
+    std::vector<Rectangle> rectangles{{1, {50, 50}, 0, 100},       
+                                      {2, {0, 100}, 100, 0}};
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+
+    ASSERT_EQ(intersections.size(), 0);
+}
+
+TEST(CanvasTest, IntersectAllTwoIdenticalLineRects) {
+    std::vector<Rectangle> rectangles{{1, {50, 50}, 0, 100},       
+                                      {2, {50, 50}, 0, 100}};
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+
+    ASSERT_EQ(intersections.size(), 0);
+}
+
+TEST(CanvasTest, IntersectAllMinimumSizeRectangles) {
+    std::vector<Rectangle> rectangles{{1, {10, 10}, 1, 1},
+                                      {2, {10, 10}, 1, 1},
+                                      {3, {20, 20}, 1, 1}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2}};
+
+    std::vector<Rectangle> interShapes = {{1, {10, 10}, 1, 1}};
+
+    Canvas canvas{rectangles};
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+
+    ASSERT_EQ(intersections.size(), 1);
+    ASSERT_EQ(intersections[0].getIntersectingRectangles(), interMembers[0]);
+    ASSERT_EQ(intersections[0].getShape(), interShapes[0]);
+}
+
+TEST(CanvasTest, IntersectAllRectanglesOverlapOnOneCorner) {
+    std::vector<Rectangle> rectangles{{1, {10, 10}, 10, 10},
+                                      {2, {19, 19}, 10, 10},
+                                      {3, {0, 0}, 5, 5}};
+
+    std::vector<std::set<Rectangle::ID>> interMembers = {{1, 2}};
+
+    std::vector<Rectangle> interShapes = {{1, {19, 19}, 1, 1}};
+
+    Canvas canvas{rectangles};
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+
+    ASSERT_EQ(intersections.size(), 1);
+    ASSERT_EQ(intersections[0].getIntersectingRectangles(), interMembers[0]);
+    ASSERT_EQ(intersections[0].getShape(), interShapes[0]);
+}
+
+TEST(CanvasTest, IntersectFifteenOverlappingRectanglesMeetsSizeExpectation) {
+    std::vector<Rectangle> rectangles{{1, {-220, -210}, 120, 120},
+                                      {2, {-220, -210}, 120, 120},
+                                      {3, {-220, -210}, 120, 120},
+                                      {4, {-220, -210}, 120, 120},
+                                      {5, {-220, -210}, 120, 120},
+                                      {6, {-220, -210}, 120, 120},
+                                      {7, {-220, -210}, 120, 120},
+                                      {8, {-220, -210}, 120, 120},
+                                      {9, {-220, -210}, 120, 120},
+                                      {10, {-220, -210}, 120, 120},
+                                      {11, {-220, -210}, 120, 120},
+                                      {12, {-220, -210}, 120, 120},
+                                      {13, {-220, -210}, 120, 120},
+                                      {14, {-220, -210}, 120, 120},
+                                      {15, {-220, -210}, 120, 120}};
+
+    Canvas canvas{rectangles};
+
+    std::vector<Canvas::RectangleIntersection> intersections = canvas.intersectAll();
+    // 2^10 minus the empty set minus subsets of size 1
+    ASSERT_EQ(intersections.size(), std::pow(2, 15) - 1 - 15);
+}
 
 } // namespace nitro

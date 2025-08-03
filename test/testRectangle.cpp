@@ -63,20 +63,21 @@ TEST(RectangleTest, CantChangeWidthHeightAfterCreationDirectly) {
 	ASSERT_EQ(rectangle.getHeight(), 80);
 }
 
-TEST(RectangleTest, UnderflowWidth) {
+TEST(RectangleTest, UnderflowWidthAndHeightByMakingAPoint) {
 	try {
-		Rectangle rectangle{1, {100, 100}, 0, 80};
+		Rectangle rectangle{1, {100, 100}, 0, 0};
 	} catch (const std::exception &e) {
-		ASSERT_TRUE(std::string(e.what()).contains("Rectangle width and height must be > 0"));
+		ASSERT_TRUE(std::string(e.what()).contains("Rects can't be points. Width or Height must be > 0"));
 	}
 }
 
-TEST(RectangleTest, UnderflowHeight) {
-	try {
-		Rectangle rectangle{1, {100, 100}, 250, 0};
-	} catch (const std::exception &e) {
-		ASSERT_TRUE(std::string(e.what()).contains("Rectangle width and height must be > 0"));
-	}
+TEST(RectangleTest, DefineLineRectangles) {
+	Rectangle rectangle{1, {100, 100}, 1, 0};
+	ASSERT_EQ(rectangle.getWidth(), 1);
+	ASSERT_EQ(rectangle.getHeight(), 0);
+	Rectangle rectangle2{1, {100, 100}, 0, 1};
+	ASSERT_EQ(rectangle2.getWidth(), 0);
+	ASSERT_EQ(rectangle2.getHeight(), 1);
 }
 
 TEST(RectangleTest, WidthExceedsXBounds) {

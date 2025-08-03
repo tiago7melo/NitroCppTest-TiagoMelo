@@ -69,6 +69,7 @@ class Application {
 		FRIEND_TEST(ApplicationTest, InitSuceedsWithValidFile);
 		FRIEND_TEST(ApplicationTest, LoadRectanglesStopsAtMaxRectCount);
 		FRIEND_TEST(ApplicationTest, LoadRectanglesDefaultMaxRectCount);
+		FRIEND_TEST(ApplicationTest, LoadRectanglesOverridesDefault);
 #endif
 };
 

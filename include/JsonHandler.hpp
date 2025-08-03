@@ -11,7 +11,7 @@ namespace nitro {
 
 using json = nlohmann::json;
 
-class JsonHandler { // TODO: JsonHandler : FileHander? instantiate a different one depending on the extension in the
+class JsonHandler { 
 	public:
 		/* Constructor, Destructor */
 		JsonHandler();
