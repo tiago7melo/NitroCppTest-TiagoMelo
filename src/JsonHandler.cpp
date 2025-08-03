@@ -65,7 +65,7 @@ std::optional<json> JsonHandler::getArray(const std::string &key, const size_t m
 		throw std::runtime_error("JSON File does not contain key: " + key);
 	}
 
-	if(!jsonFile.at(key).is_array()) {
+	if (!jsonFile.at(key).is_array()) {
 		throw std::runtime_error("JSON Object at key [" + key + "] is not an array");
 	}
 
@@ -78,18 +78,33 @@ std::optional<json> JsonHandler::getArray(const std::string &key, const size_t m
 	return array.empty() ? std::nullopt : std::make_optional(array);
 }
 
-template <typename T> 
-std::optional<T> JsonHandler::unmarshal(json j) {
+template <typename T> std::optional<T> JsonHandler::unmarshal(json j) {
 	// compiler won't even let it reach this throw
 	throw std::invalid_argument("Unmarshal not implemented for type");
 }
 
-template <> 
-std::optional<Rectangle> JsonHandler::unmarshal(json j) {
+template <> std::optional<Rectangle> JsonHandler::unmarshal(json j) {
 	if (j.contains("x") && j["x"].is_number_integer() && j.contains("y") && j["y"].is_number_integer() &&
 	    j.contains("w") && j["w"].is_number_integer() && j.contains("h") && j["h"].is_number_integer()) {
-		return Rectangle(Rectangle::ID_UNDEFINED, {j["x"].get<int>(), j["y"].get<int>()},
-												   j["w"].get<int>(), j["h"].get<int>());
+
+		int x = j["x"].get<int>();
+		int y = j["y"].get<int>();
+		int w = j["w"].get<int>();
+		int h = j["h"].get<int>();
+		std::cout << "x: " << x << ", y: " << y << ", w: " << w << ", h: " << h << "\n";
+		if (w < 0 || h < 0) {
+			throw std::runtime_error("Rectangle width and height must be non-negative");
+		}
+
+		if (w == 0 && h == 0) {
+			throw std::runtime_error("Rectangle cannot be a point (width and height both zero)");
+		}
+
+		if (w >= 0 && h >= 0) {
+			return Rectangle(Rectangle::ID_UNDEFINED, {x, y}, static_cast<uint32_t>(w), static_cast<uint32_t>(h));
+		} else {
+			throw std::runtime_error("Rectangle width and height must be non-negative");
+		}
 	} else {
 		throw std::runtime_error("JSON Object does not define a rectangle");
 	}
@@ -97,16 +112,16 @@ std::optional<Rectangle> JsonHandler::unmarshal(json j) {
 	return std::nullopt;
 }
 
-template <> 
-std::optional<std::vector<Rectangle>> JsonHandler::unmarshal(json j) {
-	if(!j.is_array()) {
+template <> std::optional<std::vector<Rectangle>> JsonHandler::unmarshal(json j) {
+	if (!j.is_array()) {
 		throw std::runtime_error("JSON Object is not an array");
 	}
-	
+
 	std::vector<Rectangle> rects;
 	Rectangle::ID id = 1;
-	for (auto jsonObject : j ) {
+	for (auto jsonObject : j) {
 		std::optional<Rectangle> r = unmarshal<Rectangle>(jsonObject);
+		std::cout << "id: " << id << "\n";
 		if (r.has_value()) {
 			Rectangle rect = r.value();
 			rect.setId(id++);

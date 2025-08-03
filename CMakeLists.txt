@@ -29,8 +29,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(json)
 
+## GoogleTest
 if(ENABLE_TESTS)
-  ## GoogleTest
   message("Fetching dependency for GoogleTest...")
   FetchContent_Declare(
     googletest
