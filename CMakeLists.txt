@@ -29,8 +29,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(json)
 
+## GoogleTest
 if(ENABLE_TESTS)
-  ## GoogleTest
   message("Fetching dependency for GoogleTest...")
   FetchContent_Declare(
     googletest
@@ -70,4 +70,8 @@ if(ENABLE_TESTS)
   target_link_libraries(${TEST_EXECUTABLE_NAME} PRIVATE gtest_main nlohmann_json::nlohmann_json)
   gtest_discover_tests(${TEST_EXECUTABLE_NAME})
 endif()
+
+install(TARGETS ${MAIN_EXECUTABLE_NAME}
+        RUNTIME DESTINATION ${CMAKE_SOURCE_DIR})
+
 

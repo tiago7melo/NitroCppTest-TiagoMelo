@@ -214,8 +214,46 @@ TEST_F(JsonHandlerTest, UnMarshalRectanglesNotAnArray) {
     EXPECT_THROW(JsonHandler::unmarshal<std::vector<Rectangle>>(j), std::runtime_error);
     try {
 		std::optional<std::vector<Rectangle>> rects = JsonHandler::unmarshal<std::vector<Rectangle>>(j);
-	} catch (const std::runtime_error &e) {
+	} catch (const std::exception &e) {
 		EXPECT_STREQ(e.what(), "JSON Object is not an array");
+	}
+}
+
+TEST_F(JsonHandlerTest, UnMarshalRectanglesNegativeSizes) {
+    std::string filePath = getPathToTestFile("test9-invalidrect.json");
+    JsonHandler jsonHandler;
+    bool ret = jsonHandler.loadFile(filePath);
+    ASSERT_TRUE(ret);
+    ASSERT_TRUE(jsonHandler.valid());
+
+    std::optional<json> j = jsonHandler.getArray("rects").value();
+    ASSERT_TRUE(j.has_value());
+    ASSERT_EQ(j.value().size(), 4);
+
+    EXPECT_THROW(JsonHandler::unmarshal<std::vector<Rectangle>>(j), std::runtime_error);
+    try {
+		std::optional<std::vector<Rectangle>> rects = JsonHandler::unmarshal<std::vector<Rectangle>>(j);
+	} catch (const std::runtime_error &e) {
+		EXPECT_STREQ(e.what(), "Rectangle width and height must be non-negative");
+	}
+}
+
+TEST_F(JsonHandlerTest, UnMarshalDefinePointShouldFail) {
+    std::string filePath = getPathToTestFile("test11-defineapoint.json");
+    JsonHandler jsonHandler;
+    bool ret = jsonHandler.loadFile(filePath);
+    ASSERT_TRUE(ret);
+    ASSERT_TRUE(jsonHandler.valid());
+
+    std::optional<json> j = jsonHandler.getArray("rects").value();
+    ASSERT_TRUE(j.has_value());
+    ASSERT_EQ(j.value().size(), 4);
+
+    EXPECT_THROW(JsonHandler::unmarshal<std::vector<Rectangle>>(j), std::runtime_error);
+    try {
+		std::optional<std::vector<Rectangle>> rects = JsonHandler::unmarshal<std::vector<Rectangle>>(j);
+	} catch (const std::runtime_error &e) {
+		EXPECT_STREQ(e.what(), "Rectangle cannot be a point (width and height both zero)");
 	}
 }
 

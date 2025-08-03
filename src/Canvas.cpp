@@ -70,7 +70,6 @@ std::optional<std::set<Canvas::RectangleIntersection>> Canvas::determinePairwise
 	return result.empty() ? std::nullopt : std::make_optional(result);
 }
 
-// TODO: try to improve clarity of algorithm by showing its analogous to a BFS
 std::optional<std::set<Canvas::RectangleIntersection>>
 Canvas::determineAllIntersections(const std::set<RectangleIntersection> &pairwiseIntersections) {
 	// Determines all higher-order intersections: intersections with 3+ intersecting rectangles
