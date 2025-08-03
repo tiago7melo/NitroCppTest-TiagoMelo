@@ -113,17 +113,12 @@ Input:
 Intersections:
    Between rectangles 1 and 3 at (140, 160) w=210, h=20
    Between rectangles 2 and 3 at (140, 200) w=230, h=60
-tiago@Tiago-IdeaPad:~/Code/NitroCppTest-TiagoMelo$ 
 ```
 ### Running the Tests
+If the project was built using the steps from [Build with Tests](#build-with-tests), here's how to run these tests.
 
-
-
-
-
-
-# TODO: specify that the build commands need to be ran from the root dir of the project
-
-
-
-# TODO: delete build.sh and clean.sh
+From the root directory of the repository:
+```bash
+cd build
+ctest .
+```
