@@ -12,7 +12,7 @@ You will require the following to be installed in your environment to build the 
 * Git SCM (for pulling the project): https://git-scm.com/downloads
 ### Third party libraries
 Building the project will also automatically fetch the following third party libraries:
-* nhlohmann::json  (Release 3.12.0): https://github.com/nlohmann/json/releases/tag/v3.12.0
+* nlohmann::json  (Release 3.12.0): https://github.com/nlohmann/json/releases/tag/v3.12.0
 * GoogleTest (Release 1.17.0): https://github.com/google/googletest/releases/tag/v1.17.0
 ## Getting the Project
 To get the project, it is recommended that you simply clone it through Git SCM.
@@ -56,7 +56,7 @@ The main executable ```rectangle_intersect```  can take up to two arguments:
 ```
 
 The **first argument** should always be the path to a JSON file that abides by the following format:
-* Contains an JSON object that is an array of JSON Object literals. This array but be named ```"rects"```
+* Contains an JSON object that is an array of JSON Object literals. This array must be named ```"rects"```
 * Each element of the array must contain the following:
     * ```"x"```: number JSON data type. Represents the X coordinate of the Top Left corner of a a rectangle.
     * ```"y"```: number JSON data type. Represents the Y coordinate of the Top Left corner of a a rectangle.
